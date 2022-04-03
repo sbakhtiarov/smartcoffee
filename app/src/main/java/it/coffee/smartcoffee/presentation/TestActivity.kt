@@ -2,6 +2,7 @@ package it.coffee.smartcoffee.presentation
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -19,7 +20,7 @@ class TestActivity : AppCompatActivity() {
         setContentView(R.layout.activity_test)
 
         val repository = CoffeeRepositoryImpl(
-            DatabaseDataSourceImpl(),
+            DatabaseDataSourceImpl(this),
             NetworkDataSourceImpl(),
             Dispatchers.IO
         )
@@ -35,7 +36,22 @@ class TestActivity : AppCompatActivity() {
                     is Failure -> Log.e("Error", result.exception.localizedMessage, result.exception)
                 }
             }
+        }
+
+        findViewById<View>(R.id.button_test_2).setOnClickListener {
+
+            lifecycleScope.launchWhenStarted {
+
+                val result = repository.database.getMachineInfo("60ba1ab72e35f2d9c786c610")
+
+                when (result) {
+                    is Success -> Log.d("Result", result.toString())
+                    is Failure -> Log.e("Error", result.exception.localizedMessage, result.exception)
+                }
+
+            }
 
         }
+
     }
 }
