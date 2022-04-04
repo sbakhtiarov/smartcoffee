@@ -9,6 +9,7 @@
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
+        <item name="android:listDivider">@drawable/list_divider</item>
     </style>
 
     <style name="Theme.SmartCoffee" parent="Base.V21.SmartCoffee">
@@ -24,6 +25,16 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <style name="ListItem">
+        <item name="android:background">@drawable/list_item_bg</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">20dp</item>
+        <item name="android:padding">24dp</item>
     </style>
 
 </resources>
