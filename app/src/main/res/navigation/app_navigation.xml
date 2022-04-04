@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/navigation_connect">
+
+    <fragment
+        android:id="@+id/navigation_connect"
+        android:name="it.coffee.smartcoffee.presentation.connect.ConnectFragment"
+        tools:layout="@layout/connect_fragment" />
+
+    <fragment
+        android:id="@+id/navigation_style"
+        android:name="it.coffee.smartcoffee.presentation.style.StyleFragment"
+        tools:layout="@layout/style_fragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_size"
+        android:name="it.coffee.smartcoffee.presentation.size.SizeFragment"
+        tools:layout="@layout/size_fragment" />
+
+    <fragment
+        android:id="@+id/navigation_extras"
+        android:name="it.coffee.smartcoffee.presentation.extra.ExtraFragment"
+        tools:layout="@layout/extra_fragment" />
+
+    <fragment
+        android:id="@+id/navigation_brew"
+        android:name="it.coffee.smartcoffee.presentation.brew.BrewFragment"
+        tools:layout="@layout/brew_fragment">
+        <action
+            android:id="@+id/action_navigation_to_style"
+            app:popUpTo="@id/navigation_connect"
+            app:popUpToInclusive="true"
+            app:launchSingleTop="true"
+            app:destination="@id/navigation_style" />
+    </fragment>
+
+</navigation>

@@ -34,9 +34,9 @@ interface CoffeeMachineDao {
     @Query("SELECT * FROM coffee_types WHERE id IN (SELECT types_map.type_id FROM types_map WHERE types_map.machine_id = :machine_id)")
     suspend fun getTypes(machine_id: String): List<CoffeeTypeEntity>
 
-    @Query("SELECT * FROM coffee_sizes WHERE id IN (SELECT sizes_map.size_id FROM sizes_map WHERE sizes_map.machine_id = :machine_id)")
-    suspend fun getSizes(machine_id: String): List<CoffeeSizeEntity>
+    @Query("SELECT * FROM coffee_sizes WHERE id IN (:sizes)")
+    suspend fun getSizes(sizes: List<String>): List<CoffeeSizeEntity>
 
-    @Query("SELECT * FROM coffee_extras WHERE id IN (SELECT extras_map.extra_id FROM extras_map WHERE extras_map.machine_id = :machine_id)")
-    suspend fun getExtras(machine_id: String): List<CoffeeExtraEntity>
+    @Query("SELECT * FROM coffee_extras WHERE id IN (:extras)")
+    suspend fun getExtras(extras: List<String>): List<CoffeeExtraEntity>
 }

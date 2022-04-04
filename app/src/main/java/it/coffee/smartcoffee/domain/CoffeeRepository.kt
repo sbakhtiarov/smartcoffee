@@ -8,8 +8,8 @@ interface CoffeeRepository {
 
     suspend fun getTypes(machine_id: String): Result<List<CoffeeType>>
 
-    suspend fun getSizes(machine_id: String): Result<List<CoffeeSize>>
+    suspend fun getSizes(sizeIds: List<String>): Result<List<CoffeeSize>>
 
-    suspend fun getExtras(machine_id: String): Result<List<CoffeeExtra>>
+    suspend fun getExtras(extraIds: List<String>): Result<List<CoffeeExtra>>
 
 }

@@ -3,7 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/git-repo/smartcoffee/app/src/main/res/layout/activity_main.xml" value="0.23802083333333332" />
         <entry key="..\:/git-repo/smartcoffee/app/src/main/res/layout/activity_test.xml" value="0.2" />
+        <entry key="..\:/git-repo/smartcoffee/app/src/main/res/layout/brew_fragment.xml" value="0.23802083333333332" />
+        <entry key="..\:/git-repo/smartcoffee/app/src/main/res/layout/connect_fragment.xml" value="0.23802083333333332" />
+        <entry key="..\:/git-repo/smartcoffee/app/src/main/res/layout/extra_fragment.xml" value="0.23802083333333332" />
+        <entry key="..\:/git-repo/smartcoffee/app/src/main/res/layout/size_fragment.xml" value="0.23802083333333332" />
+        <entry key="..\:/git-repo/smartcoffee/app/src/main/res/layout/style_fragment.xml" value="0.23802083333333332" />
       </map>
     </option>
   </component>

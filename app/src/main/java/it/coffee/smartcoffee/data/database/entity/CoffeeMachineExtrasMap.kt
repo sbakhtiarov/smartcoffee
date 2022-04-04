@@ -2,10 +2,12 @@ package it.coffee.smartcoffee.data.database.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 
 @Entity(
     tableName = "extras_map",
     primaryKeys = ["machine_id", "extra_id"],
+    indices = [Index(value = ["extra_id"], unique = true)],
     foreignKeys = [
         ForeignKey(
             entity = CoffeeMachineEntity::class,

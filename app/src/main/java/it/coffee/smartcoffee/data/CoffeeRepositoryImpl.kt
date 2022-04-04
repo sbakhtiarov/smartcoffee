@@ -8,9 +8,9 @@ import it.coffee.smartcoffee.domain.model.CoffeeType
 import kotlinx.coroutines.*
 
 class CoffeeRepositoryImpl(
-    val database: DatabaseDataSource,
-    val network: NetworkDataSource,
-    val dispatcherIo: CoroutineDispatcher) : CoffeeRepository {
+    private val database: DatabaseDataSource,
+    private val network: NetworkDataSource,
+    private val dispatcherIo: CoroutineDispatcher) : CoffeeRepository {
 
     override suspend fun getMachineInfo(machine_id: String): Result<CoffeeMachineInfo> {
         return withContext(dispatcherIo) {
@@ -37,11 +37,11 @@ class CoffeeRepositoryImpl(
         return database.getTypes(machine_id)
     }
 
-    override suspend fun getSizes(machine_id: String): Result<List<CoffeeSize>> {
-        return database.getSizes(machine_id)
+    override suspend fun getSizes(sizeIds: List<String>): Result<List<CoffeeSize>> {
+        return database.getSizes(sizeIds)
     }
 
-    override suspend fun getExtras(machine_id: String): Result<List<CoffeeExtra>> {
-        return database.getExtras(machine_id)
+    override suspend fun getExtras(extraIds: List<String>): Result<List<CoffeeExtra>> {
+        return database.getExtras(extraIds)
     }
 }

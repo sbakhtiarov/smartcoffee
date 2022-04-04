@@ -9,7 +9,6 @@ import it.coffee.smartcoffee.domain.model.CoffeeExtra
 import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
 import it.coffee.smartcoffee.domain.model.CoffeeSize
 import it.coffee.smartcoffee.domain.model.CoffeeType
-import java.lang.IllegalStateException
 
 class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
 
@@ -97,9 +96,9 @@ class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
         }
     }
 
-    override suspend fun getSizes(machine_id: String): Result<List<CoffeeSize>> {
+    override suspend fun getSizes(sizeIds: List<String>): Result<List<CoffeeSize>> {
         return try {
-            val sizes = db.coffeeMachineDao().getSizes(machine_id).map {
+            val sizes = db.coffeeMachineDao().getSizes(sizeIds).map {
                 CoffeeSize(it.id, it.name)
             }
             Success(sizes)
@@ -108,9 +107,9 @@ class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
         }
     }
 
-    override suspend fun getExtras(machine_id: String): Result<List<CoffeeExtra>> {
+    override suspend fun getExtras(extraIds: List<String>): Result<List<CoffeeExtra>> {
         return try {
-            val types = db.coffeeMachineDao().getExtras(machine_id).map {
+            val types = db.coffeeMachineDao().getExtras(extraIds).map {
                 CoffeeExtra(it.id, it.name, it.subselections)
             }
             Success(types)
