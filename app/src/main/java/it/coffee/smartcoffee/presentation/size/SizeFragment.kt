@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import it.coffee.smartcoffee.R
 import it.coffee.smartcoffee.presentation.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -32,20 +33,20 @@ class SizeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val textView = view.findViewById<TextView>(R.id.text_sizes)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.list)
 
-        viewModel.sizes.observe(viewLifecycleOwner) { sizes ->
-            sizes?.let {
-                textView.text = sizes.joinToString(separator = "\n") { it.name }
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.items.observe(viewLifecycleOwner) { items ->
+                items?.let {
+                    recyclerView.adapter = SizesAdapter(items) {
+                        mainViewModel.setSize(viewModel.getCoffeeSize(it.id))
+                    }
+                }
             }
         }
-
-        view.findViewById<View>(R.id.button_next).setOnClickListener {
-            viewModel.sizes.value?.get(0)?.let {
-                mainViewModel.setSize(it)
-            }
-        }
-
     }
-
 }

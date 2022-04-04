@@ -32,7 +32,7 @@ class StyleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.list_styles)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.list)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
