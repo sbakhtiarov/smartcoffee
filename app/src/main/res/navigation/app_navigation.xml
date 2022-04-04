@@ -8,7 +8,14 @@
     <fragment
         android:id="@+id/navigation_connect"
         android:name="it.coffee.smartcoffee.presentation.connect.ConnectFragment"
-        tools:layout="@layout/connect_fragment" />
+        tools:layout="@layout/connect_fragment">
+        <action
+            android:id="@+id/action_navigation_connect_to_style"
+            app:popUpTo="@id/navigation_connect"
+            app:popUpToInclusive="true"
+            app:launchSingleTop="true"
+            app:destination="@id/navigation_style" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_style"
@@ -31,11 +38,12 @@
         android:name="it.coffee.smartcoffee.presentation.brew.BrewFragment"
         tools:layout="@layout/brew_fragment">
         <action
-            android:id="@+id/action_navigation_to_style"
-            app:popUpTo="@id/navigation_connect"
+            android:id="@+id/action_navigation_brew_to_style"
+            app:popUpTo="@id/app_navigation"
             app:popUpToInclusive="true"
             app:launchSingleTop="true"
             app:destination="@id/navigation_style" />
     </fragment>
+
 
 </navigation>

@@ -26,7 +26,7 @@ class MainViewModel(private val repository: CoffeeRepository): ViewModel() {
 
     fun onConnected(machineInfo: CoffeeMachineInfo) {
         this.machineInfo = machineInfo
-        _navigate.value = R.id.navigation_style
+        _navigate.value = R.id.action_navigation_connect_to_style
     }
 
     fun setStyle(style: CoffeeType) {
@@ -60,6 +60,6 @@ class MainViewModel(private val repository: CoffeeRepository): ViewModel() {
 
     fun restartCoffeeBuilder() {
         coffee = null
-        _navigate.value = R.id.action_navigation_to_style
+        _navigate.value = R.id.action_navigation_brew_to_style
     }
 }

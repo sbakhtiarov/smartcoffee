@@ -28,14 +28,20 @@ class ConnectFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<View>(R.id.button_connect).setOnClickListener {
-            viewModel.getMachineInfo("60ba1ab72e35f2d9c786c610")
-        }
+//        view.findViewById<View>(R.id.button_connect).setOnClickListener {
+//            viewModel.getMachineInfo("60ba1ab72e35f2d9c786c610")
+//        }
 
         viewModel.connectionState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                Waiting -> { }
-                Connecting -> { }
+                Waiting -> {
+                    view.setOnClickListener {
+                        viewModel.getMachineInfo("60ba1ab72e35f2d9c786c610")
+                        view.setOnClickListener(null)
+                    }
+                }
+                Connecting -> {
+                }
                 is ConnectionFailure -> {
                     when (state.error) {
                         is NetworkError -> Toast.makeText(requireContext(), "No Internet. Please try later.", Toast.LENGTH_SHORT).show()

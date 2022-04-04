@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.V23.SmartCoffee" parent="Base.V21.SmartCoffee">
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.SmartCoffee" parent="Base.V23.SmartCoffee">
+    </style>
+
+</resources>
