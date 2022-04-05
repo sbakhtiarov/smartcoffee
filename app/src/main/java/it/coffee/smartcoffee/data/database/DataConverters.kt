@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import it.coffee.smartcoffee.domain.model.BaseItem
+import it.coffee.smartcoffee.domain.model.CoffeeExtra
 
 class DataConverters {
 
@@ -43,4 +44,21 @@ class DataConverters {
         }
     }
 
+    @TypeConverter
+    fun fromExtraList(value: List<CoffeeExtra>?) : String? {
+        return value?.let { list ->
+            with(Gson()) {
+                toJson(list)
+            }
+        }
+    }
+
+    @TypeConverter
+    fun toExtraList(value: String?): List<CoffeeExtra>? {
+        return value?.let { string ->
+            with(Gson()) {
+                fromJson(string, object : TypeToken<List<CoffeeExtra>> () {}.type)
+            }
+        }
+    }
 }

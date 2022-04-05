@@ -3,10 +3,13 @@ package it.coffee.smartcoffee.presentation.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import it.coffee.smartcoffee.R
+import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.model.*
+import kotlinx.coroutines.launch
 
-class MainViewModel(): ViewModel() {
+class MainViewModel(private val repository: CoffeeRepository): ViewModel() {
 
     var machineInfo: CoffeeMachineInfo? = null
     var coffee: Coffee? = null
@@ -57,10 +60,19 @@ class MainViewModel(): ViewModel() {
 
     fun confirmCoffee() {
         _navigate.value = R.id.action_navigation_overview_to_enjoy
+
+        viewModelScope.launch {
+            repository.putRecentCoffee(checkNotNull(machineId), checkNotNull(coffee))
+        }
     }
 
     fun restartCoffeeBuilder() {
         coffee = null
         _navigate.value = R.id.action_navigation_enjoy_to_style
+    }
+
+    fun repeatCoffee(coffee: Coffee) {
+        this.coffee = coffee
+        _navigate.value = R.id.action_navigate_style_to_overview
     }
 }

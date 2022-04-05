@@ -12,4 +12,8 @@ interface CoffeeRepository {
 
     suspend fun getExtras(extraIds: List<String>): Result<List<CoffeeExtra>>
 
+    suspend fun getRecentCoffee(machine_id: String): Result<Coffee>
+
+    suspend fun putRecentCoffee(machine_id: String, coffee: Coffee)
+
 }

@@ -15,4 +15,5 @@
     <string name="overview">Overview</string>
     <string name="select_your_size">Select your size</string>
     <string name="select_your_style">Select your style</string>
+    <string name="repeat_recent_coffee">Repeat recent coffee:</string>
 </resources>

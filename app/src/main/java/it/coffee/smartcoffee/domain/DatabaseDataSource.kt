@@ -1,9 +1,6 @@
 package it.coffee.smartcoffee.domain
 
-import it.coffee.smartcoffee.domain.model.CoffeeExtra
-import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
-import it.coffee.smartcoffee.domain.model.CoffeeSize
-import it.coffee.smartcoffee.domain.model.CoffeeType
+import it.coffee.smartcoffee.domain.model.*
 
 interface DatabaseDataSource {
 
@@ -16,5 +13,9 @@ interface DatabaseDataSource {
     suspend fun getSizes(sizeIds: List<String>): Result<List<CoffeeSize>>
 
     suspend fun getExtras(extraIds: List<String>): Result<List<CoffeeExtra>>
+
+    suspend fun putRecentCoffee(machine_id: String, coffee: Coffee)
+
+    suspend fun getRecentCoffee(machine_id: String): Result<Coffee>
 
 }

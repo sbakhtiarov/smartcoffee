@@ -35,7 +35,7 @@ class SmartCoffeeApp : Application() {
             CoffeeRepositoryImpl(get(), get(), Dispatchers.IO)
         }
 
-        viewModel { MainViewModel() }
+        viewModel { MainViewModel(get()) }
         viewModel { ConnectViewModel(get()) }
         viewModel { parameters-> StyleViewModel(machine_id = parameters.get(), get()) }
         viewModel { parameters-> SizeViewModel(style = parameters.get(), get()) }

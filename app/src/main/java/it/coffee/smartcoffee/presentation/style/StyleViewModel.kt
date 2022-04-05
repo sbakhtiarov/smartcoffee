@@ -8,7 +8,10 @@ import androidx.lifecycle.viewModelScope
 import it.coffee.smartcoffee.R
 import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.Failure
+import it.coffee.smartcoffee.domain.NetworkError
 import it.coffee.smartcoffee.domain.Success
+import it.coffee.smartcoffee.domain.UnknownError
+import it.coffee.smartcoffee.domain.model.Coffee
 import it.coffee.smartcoffee.domain.model.CoffeeType
 import it.coffee.smartcoffee.presentation.CoffeeUtils
 import kotlinx.coroutines.launch
@@ -17,6 +20,9 @@ class StyleViewModel(private val machine_id: String, private val repository: Cof
 
     private val _items = MutableLiveData<List<StyleListItem>>()
     val items : LiveData<List<StyleListItem>> = _items
+
+    private val _recent = MutableLiveData<Coffee>()
+    val recent : LiveData<Coffee> = _recent
 
     private var styles: List<CoffeeType>? = null
 
@@ -30,6 +36,11 @@ class StyleViewModel(private val machine_id: String, private val repository: Cof
                     }
                 }
                 is Failure -> error(result.exception)
+            }
+
+            when (val result = repository.getRecentCoffee(machine_id)) {
+                is Success -> _recent.value = result.value
+                is Failure -> { }
             }
         }
     }

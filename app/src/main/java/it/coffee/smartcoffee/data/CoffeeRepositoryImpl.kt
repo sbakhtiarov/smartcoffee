@@ -1,10 +1,7 @@
 package it.coffee.smartcoffee.data
 
 import it.coffee.smartcoffee.domain.*
-import it.coffee.smartcoffee.domain.model.CoffeeExtra
-import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
-import it.coffee.smartcoffee.domain.model.CoffeeSize
-import it.coffee.smartcoffee.domain.model.CoffeeType
+import it.coffee.smartcoffee.domain.model.*
 import kotlinx.coroutines.*
 
 class CoffeeRepositoryImpl(
@@ -43,5 +40,15 @@ class CoffeeRepositoryImpl(
 
     override suspend fun getExtras(extraIds: List<String>): Result<List<CoffeeExtra>> {
         return database.getExtras(extraIds)
+    }
+
+    override suspend fun putRecentCoffee(machine_id: String, coffee: Coffee) {
+        withContext(dispatcherIo + NonCancellable) {
+            database.putRecentCoffee(machine_id, coffee)
+        }
+    }
+
+    override suspend fun getRecentCoffee(machine_id: String): Result<Coffee> {
+        return database.getRecentCoffee(machine_id)
     }
 }

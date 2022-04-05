@@ -13,7 +13,8 @@ import it.coffee.smartcoffee.data.database.entity.*
     CoffeeMachineSizesMap::class,
     CoffeeMachineTypesMap::class,
     CoffeeSizeEntity::class,
-    CoffeeTypeEntity::class
+    CoffeeTypeEntity::class,
+    RecentCoffeeEntity::class,
 ], version = 1, exportSchema = false)
 @TypeConverters(DataConverters::class)
 abstract class CoffeeMachineDatabase : RoomDatabase() {

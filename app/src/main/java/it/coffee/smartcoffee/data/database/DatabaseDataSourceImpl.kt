@@ -4,11 +4,15 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.withTransaction
 import it.coffee.smartcoffee.data.database.entity.*
-import it.coffee.smartcoffee.domain.*
-import it.coffee.smartcoffee.domain.model.CoffeeExtra
-import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
-import it.coffee.smartcoffee.domain.model.CoffeeSize
-import it.coffee.smartcoffee.domain.model.CoffeeType
+import it.coffee.smartcoffee.domain.DatabaseDataSource
+import it.coffee.smartcoffee.domain.Result
+import it.coffee.smartcoffee.domain.Success
+import it.coffee.smartcoffee.domain.UnknownError
+import it.coffee.smartcoffee.domain.model.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import java.lang.IllegalStateException
+import java.util.NoSuchElementException
 
 class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
 
@@ -116,5 +120,45 @@ class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
         } catch (e: Throwable) {
             UnknownError(e)
         }
+    }
+
+    override suspend fun getRecentCoffee(machine_id: String): Result<Coffee> {
+
+        return try {
+
+            val entity = db.coffeeMachineDao().getRecentCoffee(machine_id)
+
+            if (entity != null) {
+                coroutineScope {
+
+                    val typeEntity = async { db.coffeeMachineDao().getStyle(entity.style_id) }
+                    val sizeEntity = async { db.coffeeMachineDao().getSize(entity.size_id) }
+
+                    val style = with(typeEntity.await()) {
+                        CoffeeType(id, name, sizes, extras)
+                    }
+
+                    val size = with(sizeEntity.await()) {
+                        CoffeeSize(id, name)
+                    }
+
+                    Success(Coffee(style, size, entity.choices))
+                }
+            } else {
+                UnknownError(NoSuchElementException("No recent coffee"))
+            }
+
+        } catch (e: Throwable) {
+            UnknownError(e)
+        }
+    }
+
+    override suspend fun putRecentCoffee(machine_id: String, coffee: Coffee) {
+        db.coffeeMachineDao().insertRecentCoffee(RecentCoffeeEntity(
+            machine_id,
+            coffee.style.id,
+            coffee.size?.id ?: "",
+            coffee.extra
+        ))
     }
 }
