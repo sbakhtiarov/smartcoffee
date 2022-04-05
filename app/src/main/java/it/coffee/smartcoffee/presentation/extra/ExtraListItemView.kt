@@ -22,7 +22,7 @@ class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: Attri
 
     var callback: ((extraId: String, choiceId: String) -> Unit)? = null
 
-    var isExpanded: Boolean = false
+    private var isExpanded: Boolean = false
         set(value) {
             if (value != field) {
                 field = value
@@ -117,38 +117,6 @@ class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: Attri
                     callback?.invoke(cItem.id, choice.id)
                 }
         }
-
-//        currentItem?.let { cItem ->
-//
-//            val choiceItems = HashSet<ExtraChoiceItem>()
-//
-//            cItem.choices.forEachIndexed { index, item ->
-//
-//                val choiceView = choices.getChildAt(index)
-//                val extraIcon = choiceView.findViewById<ImageView>(R.id.image1)
-//
-//                if (item.id == id) {
-//                    if (item.selected) {
-////                        extraIcon.setImageResource(R.drawable.ic_extra_choice)
-//                        choiceItems.add(item.copy(selected = true))
-//                    } else {
-//                        extraIcon.setImageResource(R.drawable.ic_extra_choice_selected)
-//                        choiceItems.add(item.copy(selected = true))
-//                    }
-//                } else {
-//                    extraIcon.setImageResource(R.drawable.ic_extra_choice)
-//                    choiceItems.add(item.copy(selected = false))
-//                }
-//            }
-//
-//            currentItem = cItem.copy(choices = choiceItems)
-//        }
-//
-//
-//        postDelayed(500) {
-//            isExpanded = false
- //        }
-
     }
 
 }

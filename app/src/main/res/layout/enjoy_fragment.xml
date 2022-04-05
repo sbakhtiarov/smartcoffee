@@ -6,7 +6,7 @@
     android:padding="42dp">
 
     <TextView
-        android:text="Enjoy you coffee!"
+        android:text="@string/enjoy_you_coffee"
         android:textSize="70sp"
         android:textColor="@color/green_2"
         android:layout_marginTop="50dp"
@@ -22,6 +22,6 @@
         android:id="@+id/button_new_coffee"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Make another" />
+        android:text="@string/make_another" />
 
 </LinearLayout>

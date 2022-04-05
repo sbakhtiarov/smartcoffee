@@ -6,4 +6,13 @@
     <string name="tab_the_machine_to_start">Tab the machine to start</string>
     <string name="how_does_this_work">How does this work?</string>
     <string name="tap_anywhere_to_continue">Tap anywhere to continue</string>
+    <string name="enjoy_you_coffee">Enjoy you coffee!</string>
+    <string name="make_another">Make another</string>
+    <string name="done">Done</string>
+    <string name="select_your_extras">Select your extras</string>
+    <string name="brew_with_lex">Brew with Lex</string>
+    <string name="brew_your_coffee">Brew your coffee</string>
+    <string name="overview">Overview</string>
+    <string name="select_your_size">Select your size</string>
+    <string name="select_your_style">Select your style</string>
 </resources>

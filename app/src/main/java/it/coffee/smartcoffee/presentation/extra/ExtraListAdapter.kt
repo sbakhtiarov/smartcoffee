@@ -12,7 +12,7 @@ class ExtraListAdapter(private val callback: (extraId: String, choiceId: String)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExtraViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.extra_list_item, parent, false)
-        return ExtraListAdapter.ExtraViewHolder(view)
+        return ExtraViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ExtraViewHolder, position: Int) {
@@ -40,26 +40,15 @@ object ExtraDiffCallback : DiffUtil.ItemCallback<ExtraListItem>() {
     }
 
     override fun areContentsTheSame(oldItem: ExtraListItem, newItem: ExtraListItem): Boolean {
-//        if (oldItem == newItem) {
-//            oldItem.choices.zip(newItem.choices).forEach { (old, new) ->
-//                if (old.selected != new.selected) {
-//                    return false
-//                }
-//            }
-//            return true
-//        }
-//
         return oldItem == newItem
     }
 
     override fun getChangePayload(oldItem: ExtraListItem, newItem: ExtraListItem): Any? {
-
         oldItem.choices.zip(newItem.choices).forEach { (old, new) ->
             if (new.selected && !old.selected) {
                 return new.id
             }
         }
-
         return null
     }
 

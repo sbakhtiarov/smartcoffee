@@ -1,15 +1,9 @@
 package it.coffee.smartcoffee.presentation.main
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import it.coffee.smartcoffee.R
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

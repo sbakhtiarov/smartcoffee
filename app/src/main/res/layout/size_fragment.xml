@@ -12,14 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Brew with Lex"
+        android:text="@string/brew_with_lex"
         android:textAppearance="@style/TextAppearance.ActionBar.Title" />
 
     <TextView
         android:id="@+id/text_title_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select your size"
+        android:text="@string/select_your_size"
         android:textAppearance="@style/TextAppearance.Title" />
 
     <androidx.recyclerview.widget.RecyclerView
