@@ -28,7 +28,7 @@ class SizeViewModel(private val style: CoffeeType, private val repository: Coffe
                 is Success -> {
                     sizes = result.value
                     _items.value = sizes?.map {
-                        SizeListItem(it.id, getIcon(it.name), it.name)
+                        SizeListItem(it.id, getIcon(it.id), it.name)
                     }
                 }
                 is Failure -> error(result.exception)
@@ -36,10 +36,10 @@ class SizeViewModel(private val style: CoffeeType, private val repository: Coffe
         }
     }
 
-    private fun getIcon(name: String): Int {
-        return when(name.lowercase()) {
-            "large" -> R.drawable.ic_coffee_large
-            "small" -> R.drawable.ic_coffee_small
+    private fun getIcon(id: String): Int {
+        return when(id) {
+            "60ba18d13ca8c43196b5f606" -> R.drawable.ic_coffee_large
+            "60ba3368c45ecee5d77a016b" -> R.drawable.ic_coffee_small
             else -> R.drawable.ic_coffee_medium
         }
     }

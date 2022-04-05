@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import it.coffee.smartcoffee.R
 import it.coffee.smartcoffee.presentation.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -32,23 +34,30 @@ class ExtraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val textView = view.findViewById<TextView>(R.id.text_extras)
+        val buttonDone = view.findViewById<View>(R.id.button_done)
 
-        viewModel.extras.observe(viewLifecycleOwner) { extras ->
-            extras?.let {
-//                textView.text = extras.joinToString(separator = "\n") { it.toString() }
-                val gson = GsonBuilder()
-                    .setPrettyPrinting()
-                    .create()
-                textView.text = gson.toJson(extras).toString()
-            }
+        buttonDone.setOnClickListener {
+            mainViewModel.setExtras(viewModel.getChoices())
         }
 
-        view.findViewById<View>(R.id.button_next).setOnClickListener {
-            val extras = viewModel.extras.value?.map {
-                it.copy(subselections = listOf(it.subselections[0]))
+        val recyclerView = view.findViewById<RecyclerView>(R.id.list)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = ExtraListAdapter() { extraId, choiceId ->
+           viewModel.onChoice(extraId, choiceId)
+        }
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.items.observe(viewLifecycleOwner) { items ->
+                items?.let {
+                    adapter.submitList(items)
+                }
             }
-            mainViewModel.setExtras(extras ?: emptyList())
+
+            viewModel.showNext.observe(viewLifecycleOwner) { showNext ->
+                buttonDone.isVisible = showNext ?: false
+            }
         }
     }
 }

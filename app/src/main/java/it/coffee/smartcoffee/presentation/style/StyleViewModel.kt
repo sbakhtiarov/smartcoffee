@@ -25,7 +25,7 @@ class StyleViewModel(private val machine_id: String, private val repository: Cof
                 is Success -> {
                     styles = result.value
                     _items.value = styles?.map {
-                        StyleListItem(it.id, getIcon(it.name), it.name)
+                        StyleListItem(it.id, getIcon(it.id), it.name)
                     }
                 }
                 is Failure -> error(result.exception)
@@ -37,11 +37,10 @@ class StyleViewModel(private val machine_id: String, private val repository: Cof
         return styles?.find { it.id == styleId } ?: error("Style not found")
     }
 
-    // TODO: Bad idea to get icon based on the coffee name but I am not sure if type ids are stable
     private fun getIcon(name: String): Int {
-        return when (name.lowercase()) {
-            "cappuccino" -> R.drawable.ic_cappuccino
-            "espresso" -> R.drawable.ic_espresso
+        return when (name) {
+            "60be1eabc45ecee5d77ad960" -> R.drawable.ic_cappuccino
+            "60be1db3c45ecee5d77ad890" -> R.drawable.ic_espresso
             else -> R.drawable.ic_coffee_medium
         }
     }
