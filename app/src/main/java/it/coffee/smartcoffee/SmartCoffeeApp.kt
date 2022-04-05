@@ -7,7 +7,6 @@ import it.coffee.smartcoffee.data.network.NetworkDataSourceImpl
 import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.DatabaseDataSource
 import it.coffee.smartcoffee.domain.NetworkDataSource
-import it.coffee.smartcoffee.presentation.brew.BrewViewModel
 import it.coffee.smartcoffee.presentation.connect.ConnectViewModel
 import it.coffee.smartcoffee.presentation.extra.ExtraViewModel
 import it.coffee.smartcoffee.presentation.main.MainViewModel
@@ -36,12 +35,11 @@ class SmartCoffeeApp : Application() {
             CoffeeRepositoryImpl(get(), get(), Dispatchers.IO)
         }
 
-        viewModel { MainViewModel(get()) }
+        viewModel { MainViewModel() }
         viewModel { ConnectViewModel(get()) }
         viewModel { parameters-> StyleViewModel(machine_id = parameters.get(), get()) }
         viewModel { parameters-> SizeViewModel(style = parameters.get(), get()) }
         viewModel { parameters-> ExtraViewModel(style = parameters.get(), get()) }
-        viewModel { BrewViewModel(get()) }
     }
 
     override fun onCreate() {

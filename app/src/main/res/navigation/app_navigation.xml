@@ -34,11 +34,23 @@
         tools:layout="@layout/extra_fragment" />
 
     <fragment
-        android:id="@+id/navigation_brew"
-        android:name="it.coffee.smartcoffee.presentation.brew.BrewFragment"
-        tools:layout="@layout/brew_fragment">
+        android:id="@+id/navigation_overview"
+        android:name="it.coffee.smartcoffee.presentation.overview.OverviewFragment"
+        tools:layout="@layout/overview_fragment">
         <action
-            android:id="@+id/action_navigation_brew_to_style"
+            android:id="@+id/action_navigation_overview_to_enjoy"
+            app:popUpTo="@id/app_navigation"
+            app:popUpToInclusive="true"
+            app:launchSingleTop="true"
+            app:destination="@id/navigation_enjoy" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_enjoy"
+        android:name="it.coffee.smartcoffee.presentation.enjoy.EnjoyFragment"
+        tools:layout="@layout/enjoy_fragment">
+        <action
+            android:id="@+id/action_navigation_enjoy_to_style"
             app:popUpTo="@id/app_navigation"
             app:popUpToInclusive="true"
             app:launchSingleTop="true"

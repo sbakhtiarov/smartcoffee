@@ -10,6 +10,7 @@ import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.Failure
 import it.coffee.smartcoffee.domain.Success
 import it.coffee.smartcoffee.domain.model.CoffeeType
+import it.coffee.smartcoffee.presentation.CoffeeUtils
 import kotlinx.coroutines.launch
 
 class StyleViewModel(private val machine_id: String, private val repository: CoffeeRepository) : ViewModel() {
@@ -25,7 +26,7 @@ class StyleViewModel(private val machine_id: String, private val repository: Cof
                 is Success -> {
                     styles = result.value
                     _items.value = styles?.map {
-                        StyleListItem(it.id, getIcon(it.id), it.name)
+                        StyleListItem(it.id, CoffeeUtils.getStyleIcon(it.id), it.name)
                     }
                 }
                 is Failure -> error(result.exception)
@@ -37,13 +38,6 @@ class StyleViewModel(private val machine_id: String, private val repository: Cof
         return styles?.find { it.id == styleId } ?: error("Style not found")
     }
 
-    private fun getIcon(name: String): Int {
-        return when (name) {
-            "60be1eabc45ecee5d77ad960" -> R.drawable.ic_cappuccino
-            "60be1db3c45ecee5d77ad890" -> R.drawable.ic_espresso
-            else -> R.drawable.ic_coffee_medium
-        }
-    }
 }
 
 data class StyleListItem(val id: String, @DrawableRes val icon: Int, val name: String)

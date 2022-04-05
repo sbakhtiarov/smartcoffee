@@ -11,6 +11,7 @@ import it.coffee.smartcoffee.domain.Failure
 import it.coffee.smartcoffee.domain.Success
 import it.coffee.smartcoffee.domain.model.CoffeeSize
 import it.coffee.smartcoffee.domain.model.CoffeeType
+import it.coffee.smartcoffee.presentation.CoffeeUtils
 import kotlinx.coroutines.launch
 
 class SizeViewModel(private val style: CoffeeType, private val repository: CoffeeRepository) : ViewModel() {
@@ -28,19 +29,11 @@ class SizeViewModel(private val style: CoffeeType, private val repository: Coffe
                 is Success -> {
                     sizes = result.value
                     _items.value = sizes?.map {
-                        SizeListItem(it.id, getIcon(it.id), it.name)
+                        SizeListItem(it.id, CoffeeUtils.getSizeIcon(it.id), it.name)
                     }
                 }
                 is Failure -> error(result.exception)
             }
-        }
-    }
-
-    private fun getIcon(id: String): Int {
-        return when(id) {
-            "60ba18d13ca8c43196b5f606" -> R.drawable.ic_coffee_large
-            "60ba3368c45ecee5d77a016b" -> R.drawable.ic_coffee_small
-            else -> R.drawable.ic_coffee_medium
         }
     }
 

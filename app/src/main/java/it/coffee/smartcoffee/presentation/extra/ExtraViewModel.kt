@@ -12,6 +12,7 @@ import it.coffee.smartcoffee.domain.Success
 import it.coffee.smartcoffee.domain.model.CoffeeExtra
 import it.coffee.smartcoffee.domain.model.CoffeeType
 import it.coffee.smartcoffee.domain.model.ExtraChoice
+import it.coffee.smartcoffee.presentation.CoffeeUtils
 import kotlinx.coroutines.launch
 
 class ExtraViewModel(private val style: CoffeeType, private val repository: CoffeeRepository) :
@@ -34,7 +35,7 @@ class ExtraViewModel(private val style: CoffeeType, private val repository: Coff
                     extras = result.value.toHashSet()
 
                     _items.value = result.value.map {
-                        ExtraListItem(it.id, getIcon(it.id), it.name, it.subselections.map { choice ->
+                        ExtraListItem(it.id, CoffeeUtils.getExtraIcon(it.id), it.name, it.subselections.map { choice ->
                             ExtraChoiceItem(choice.id, choice.name)
                         }.toMutableSet())
                     }
@@ -42,14 +43,6 @@ class ExtraViewModel(private val style: CoffeeType, private val repository: Coff
                 }
                 is Failure -> error(result.exception)
             }
-        }
-    }
-
-    private fun getIcon(id: String): Int {
-        return when (id) {
-            "60ba34a0c45ecee5d77a0263" -> R.drawable.ic_milk
-            "60ba197c2e35f2d9c786c525" -> R.drawable.ic_cappuccino
-            else -> R.drawable.ic_coffee_medium
         }
     }
 
@@ -89,7 +82,7 @@ class ExtraViewModel(private val style: CoffeeType, private val repository: Coff
     }
 }
 
-data class ExtraChoiceItem(val id: String, val name: String, var selected: Boolean = false)
+data class ExtraChoiceItem(val id: String, val name: String, val selected: Boolean = false)
 
 data class ExtraListItem(
     val id: String,

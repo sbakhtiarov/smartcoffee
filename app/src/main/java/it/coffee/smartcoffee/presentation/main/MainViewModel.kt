@@ -4,12 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.coffee.smartcoffee.R
-import it.coffee.smartcoffee.domain.CoffeeRepository
-import it.coffee.smartcoffee.domain.Failure
-import it.coffee.smartcoffee.domain.Success
 import it.coffee.smartcoffee.domain.model.*
 
-class MainViewModel(private val repository: CoffeeRepository): ViewModel() {
+class MainViewModel(): ViewModel() {
 
     var machineInfo: CoffeeMachineInfo? = null
     var coffee: Coffee? = null
@@ -38,7 +35,7 @@ class MainViewModel(private val repository: CoffeeRepository): ViewModel() {
             if (!style.extras.isNullOrEmpty()) {
                 _navigate.value = R.id.navigation_extras
             } else {
-                _navigate.value = R.id.navigation_brew
+                _navigate.value = R.id.navigation_overview
             }
         }
 
@@ -49,17 +46,21 @@ class MainViewModel(private val repository: CoffeeRepository): ViewModel() {
         if (!coffee?.style?.extras.isNullOrEmpty()) {
             _navigate.value = R.id.navigation_extras
         } else {
-            _navigate.value = R.id.navigation_brew
+            _navigate.value = R.id.navigation_overview
         }
     }
 
     fun setExtras(extras: List<CoffeeExtra>) {
         coffee = coffee?.copy(extra = extras)
-        _navigate.value = R.id.navigation_brew
+        _navigate.value = R.id.navigation_overview
+    }
+
+    fun confirmCoffee() {
+        _navigate.value = R.id.action_navigation_overview_to_enjoy
     }
 
     fun restartCoffeeBuilder() {
         coffee = null
-        _navigate.value = R.id.action_navigation_brew_to_style
+        _navigate.value = R.id.action_navigation_enjoy_to_style
     }
 }
