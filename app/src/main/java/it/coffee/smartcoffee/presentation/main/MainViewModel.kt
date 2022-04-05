@@ -30,12 +30,12 @@ class MainViewModel(): ViewModel() {
         coffee = Coffee(style = style, size = null, extra = emptyList())
 
         if (!style.sizes.isNullOrEmpty()) {
-            _navigate.value = R.id.navigation_size
+            _navigate.value = R.id.action_navigate_style_to_size
         } else {
             if (!style.extras.isNullOrEmpty()) {
-                _navigate.value = R.id.navigation_extras
+                _navigate.value = R.id.action_navigate_style_to_extras
             } else {
-                _navigate.value = R.id.navigation_overview
+                _navigate.value = R.id.action_navigate_style_to_overview
             }
         }
 
@@ -44,15 +44,15 @@ class MainViewModel(): ViewModel() {
     fun setSize(size: CoffeeSize) {
         coffee = coffee?.copy(size = size)
         if (!coffee?.style?.extras.isNullOrEmpty()) {
-            _navigate.value = R.id.navigation_extras
+            _navigate.value = R.id.action_navigate_size_to_extras
         } else {
-            _navigate.value = R.id.navigation_overview
+            _navigate.value = R.id.action_navigate_size_to_overview
         }
     }
 
     fun setExtras(extras: List<CoffeeExtra>) {
         coffee = coffee?.copy(extra = extras)
-        _navigate.value = R.id.navigation_overview
+        _navigate.value = R.id.action_navigate_extras_to_overview
     }
 
     fun confirmCoffee() {

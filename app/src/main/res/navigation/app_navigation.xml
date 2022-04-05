@@ -11,27 +11,75 @@
         tools:layout="@layout/connect_fragment">
         <action
             android:id="@+id/action_navigation_connect_to_style"
-            app:popUpTo="@id/navigation_connect"
-            app:popUpToInclusive="true"
+            app:destination="@id/navigation_style"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/disappear"
             app:launchSingleTop="true"
-            app:destination="@id/navigation_style" />
+            app:popEnterAnim="@anim/appear"
+            app:popExitAnim="@anim/slide_right"
+            app:popUpTo="@id/navigation_connect"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_style"
         android:name="it.coffee.smartcoffee.presentation.style.StyleFragment"
         tools:layout="@layout/style_fragment">
+        <action
+            android:id="@+id/action_navigate_style_to_size"
+            app:destination="@id/navigation_size"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/disappear"
+            app:popEnterAnim="@anim/appear"
+            app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_navigate_style_to_extras"
+            app:destination="@id/navigation_extras"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/disappear"
+            app:popEnterAnim="@anim/appear"
+            app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_navigate_style_to_overview"
+            app:destination="@id/navigation_overview"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/disappear"
+            app:popEnterAnim="@anim/appear"
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_size"
         android:name="it.coffee.smartcoffee.presentation.size.SizeFragment"
-        tools:layout="@layout/size_fragment" />
+        tools:layout="@layout/size_fragment">
+        <action
+            android:id="@+id/action_navigate_size_to_extras"
+            app:destination="@id/navigation_extras"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/disappear"
+            app:popEnterAnim="@anim/appear"
+            app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_navigate_size_to_overview"
+            app:destination="@id/navigation_overview"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/disappear"
+            app:popEnterAnim="@anim/appear"
+            app:popExitAnim="@anim/slide_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_extras"
         android:name="it.coffee.smartcoffee.presentation.extra.ExtraFragment"
-        tools:layout="@layout/extra_fragment" />
+        tools:layout="@layout/extra_fragment">
+        <action
+            android:id="@+id/action_navigate_extras_to_overview"
+            app:destination="@id/navigation_overview"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/disappear"
+            app:popEnterAnim="@anim/appear"
+            app:popExitAnim="@anim/slide_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_overview"
@@ -39,10 +87,14 @@
         tools:layout="@layout/overview_fragment">
         <action
             android:id="@+id/action_navigation_overview_to_enjoy"
-            app:popUpTo="@id/app_navigation"
-            app:popUpToInclusive="true"
+            app:destination="@id/navigation_enjoy"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/disappear"
             app:launchSingleTop="true"
-            app:destination="@id/navigation_enjoy" />
+            app:popEnterAnim="@anim/appear"
+            app:popExitAnim="@anim/slide_right"
+            app:popUpTo="@id/app_navigation"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -51,10 +103,14 @@
         tools:layout="@layout/enjoy_fragment">
         <action
             android:id="@+id/action_navigation_enjoy_to_style"
-            app:popUpTo="@id/app_navigation"
-            app:popUpToInclusive="true"
+            app:destination="@id/navigation_style"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/disappear"
             app:launchSingleTop="true"
-            app:destination="@id/navigation_style" />
+            app:popEnterAnim="@anim/appear"
+            app:popExitAnim="@anim/slide_right"
+            app:popUpTo="@id/app_navigation"
+            app:popUpToInclusive="true" />
     </fragment>
 
 
