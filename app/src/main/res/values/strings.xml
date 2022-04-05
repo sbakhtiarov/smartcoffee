@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Smart Coffee</string>
+    <string name="no_connection_error">No Internet. Please try later.</string>
+    <string name="unknown_error">Connection error. Please try later.</string>
+    <string name="dark_roasted_beans">Dark Roasted Beans</string>
+    <string name="tab_the_machine_to_start">Tab the machine to start</string>
+    <string name="how_does_this_work">How does this work?</string>
+    <string name="tap_anywhere_to_continue">Tap anywhere to continue</string>
 </resources>

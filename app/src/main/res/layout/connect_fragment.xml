@@ -5,6 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="?selectableItemBackgroundBorderless"
     tools:context=".presentation.connect.ConnectFragment">
 
@@ -14,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Dark Roasted Beans"
+        android:text="@string/dark_roasted_beans"
         android:textAppearance="@style/TextAppearance.ActionBar.Title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Tab the machine to start"
+        android:text="@string/tab_the_machine_to_start"
         android:textAppearance="@style/TextAppearance.Title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_title_1" />
@@ -40,17 +41,27 @@
         app:layout_constraintTop_toBottomOf="@id/text_title_2" />
 
     <TextView
-        android:id="@+id/text_info"
-        android:layout_width="wrap_content"
+        android:id="@+id/text_screen_tap"
+        android:text="@string/tap_anywhere_to_continue"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:textColor="@color/green"
+        android:alpha="0.2"
+        android:visibility="gone"
+        android:layout_marginBottom="32dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:background="?selectableItemBackgroundBorderless"
-        android:padding="16dp"
-        android:text="How does this work?"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_logo" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:visibility="gone"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginBottom="32dp"
+        android:indeterminateTint="@color/green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

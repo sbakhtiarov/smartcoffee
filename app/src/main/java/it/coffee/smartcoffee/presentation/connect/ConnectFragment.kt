@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import it.coffee.smartcoffee.R
 import it.coffee.smartcoffee.domain.NetworkError
@@ -32,26 +33,35 @@ class ConnectFragment : Fragment() {
 //            viewModel.getMachineInfo("60ba1ab72e35f2d9c786c610")
 //        }
 
+        val progress = view.findViewById<View>(R.id.progress)
+        val tapText = view.findViewById<View>(R.id.text_screen_tap)
+
         viewModel.connectionState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                Waiting -> {
+                is Waiting -> {
                     view.setOnClickListener {
                         viewModel.getMachineInfo("60ba1ab72e35f2d9c786c610")
                         view.setOnClickListener(null)
                     }
+                    progress.isVisible = false
+                    tapText.isVisible = state.showHelp
                 }
                 Connecting -> {
+                    progress.isVisible = true
+                    tapText.isVisible = false
                 }
                 is ConnectionFailure -> {
                     when (state.error) {
-                        is NetworkError -> Toast.makeText(requireContext(), "No Internet. Please try later.", Toast.LENGTH_SHORT).show()
-                        is UnknownError -> Toast.makeText(requireContext(), "Connection error. Please try later.", Toast.LENGTH_SHORT).show()
+                        is NetworkError -> Toast.makeText(requireContext(), getString(R.string.no_connection_error), Toast.LENGTH_SHORT).show()
+                        is UnknownError -> Toast.makeText(requireContext(), getString(R.string.unknown_error), Toast.LENGTH_SHORT).show()
                     }
                     viewModel.onErrorShown ()
                 }
                 is ConnectionSuccess -> {
                     mainViewModel.onConnected(state.machineInfo)
                     viewModel.onConnectHandled()
+                    progress.isVisible = false
+                    tapText.isVisible = false
                 }
             }
         }

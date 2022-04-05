@@ -8,19 +8,33 @@ import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.Failure
 import it.coffee.smartcoffee.domain.Success
 import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 sealed class ConnectionState
 
-object Waiting : ConnectionState()
+class Waiting(val showHelp: Boolean = false) : ConnectionState()
 object Connecting : ConnectionState()
 class ConnectionSuccess(val machineInfo: CoffeeMachineInfo) : ConnectionState()
 class ConnectionFailure(val error: Failure) : ConnectionState()
 
 class ConnectViewModel(private val repository: CoffeeRepository) : ViewModel() {
 
-    private val _connectionState = MutableLiveData<ConnectionState>(Waiting)
+    private val _connectionState = MutableLiveData<ConnectionState>(Waiting())
     val connectionState: LiveData<ConnectionState> = _connectionState
+
+    init {
+        scheduleHelpAppear()
+    }
+
+    private fun scheduleHelpAppear() {
+        viewModelScope.launch {
+            delay(2000)
+            if (_connectionState.value is Waiting) {
+                _connectionState.value = Waiting(true)
+            }
+        }
+    }
 
     fun getMachineInfo(machine_id: String) {
 
@@ -35,11 +49,13 @@ class ConnectViewModel(private val repository: CoffeeRepository) : ViewModel() {
     }
 
     fun onConnectHandled() {
-        _connectionState.value = Waiting
+        _connectionState.value = Waiting()
+        scheduleHelpAppear()
     }
 
     fun onErrorShown() {
-        _connectionState.value = Waiting
+        _connectionState.value = Waiting()
+        scheduleHelpAppear()
     }
 
 }
