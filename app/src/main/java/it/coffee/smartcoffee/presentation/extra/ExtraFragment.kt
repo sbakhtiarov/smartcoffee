@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +20,7 @@ class ExtraFragment : Fragment() {
 
     private val mainViewModel: MainViewModel by sharedViewModel()
     private val viewModel: ExtraViewModel by viewModel {
-        parametersOf(mainViewModel.coffee?.style ?: error("No style selected"))
+        parametersOf(requireNotNull(mainViewModel.coffee?.style) { "No style selected" })
     }
 
     override fun onCreateView(

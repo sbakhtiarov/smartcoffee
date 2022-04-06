@@ -20,7 +20,7 @@ class SizeFragment : Fragment() {
     private val mainViewModel: MainViewModel by sharedViewModel()
     private val viewModel: SizeViewModel by viewModel {
         parametersOf(
-            mainViewModel.coffee?.style ?: error("No style selected"))
+            requireNotNull(mainViewModel.coffee?.style) { "No style selected" })
     }
 
     override fun onCreateView(

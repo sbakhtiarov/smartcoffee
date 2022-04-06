@@ -29,10 +29,6 @@ class ConnectFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        view.findViewById<View>(R.id.button_connect).setOnClickListener {
-//            viewModel.getMachineInfo("60ba1ab72e35f2d9c786c610")
-//        }
-
         val progress = view.findViewById<View>(R.id.progress)
         val tapText = view.findViewById<View>(R.id.text_screen_tap)
 
@@ -40,7 +36,7 @@ class ConnectFragment : Fragment() {
             when (state) {
                 is Waiting -> {
                     view.setOnClickListener {
-                        viewModel.getMachineInfo("60ba1ab72e35f2d9c786c610")
+                        viewModel.getMachineInfo("60ba1ab72e35f2d9c786c610") // Hardcoded test machine id
                         view.setOnClickListener(null)
                     }
                     progress.isVisible = false
@@ -58,10 +54,11 @@ class ConnectFragment : Fragment() {
                     viewModel.onErrorShown ()
                 }
                 is ConnectionSuccess -> {
-                    mainViewModel.onConnected(state.machineInfo)
-                    viewModel.onConnectHandled()
                     progress.isVisible = false
                     tapText.isVisible = false
+
+                    viewModel.onConnectHandled()
+                    mainViewModel.onConnected(state.machineInfo)
                 }
             }
         }

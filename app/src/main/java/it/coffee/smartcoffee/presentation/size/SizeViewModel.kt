@@ -23,9 +23,7 @@ class SizeViewModel(private val style: CoffeeType, private val repository: Coffe
 
     init {
         viewModelScope.launch {
-            val result = repository.getSizes(style.sizes ?: error("No sizes defined"))
-
-            when (result) {
+            when (val result = repository.getSizes(style.sizes ?: error("No sizes defined"))) {
                 is Success -> {
                     sizes = result.value
                     _items.value = sizes?.map {

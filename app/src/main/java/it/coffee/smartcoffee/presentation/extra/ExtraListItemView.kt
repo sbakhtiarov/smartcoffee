@@ -165,11 +165,11 @@ class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun onSelection(id: String) {
-        currentItem?.let { cItem ->
-            val choice = cItem.choices.find { it.id == id } ?: return
-                if (!choice.selected) {
-                    callback?.invoke(cItem.id, choice.id)
-                }
+        requireNotNull(currentItem).let { item ->
+            val choice = item.choices.find { it.id == id } ?: return
+            if (!choice.selected) {
+                callback?.invoke(item.id, choice.id)
+            }
         }
     }
 

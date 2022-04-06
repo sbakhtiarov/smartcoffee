@@ -22,7 +22,7 @@ class StyleFragment : Fragment() {
 
     private val mainViewModel: MainViewModel by sharedViewModel()
     private val viewModel: StyleViewModel by viewModel {
-        parametersOf(mainViewModel.machineId ?: error("No machine id"))
+        parametersOf(requireNotNull(mainViewModel.machineId) { "No machine id" })
     }
 
     override fun onCreateView(

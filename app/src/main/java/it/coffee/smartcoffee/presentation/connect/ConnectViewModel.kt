@@ -27,6 +27,7 @@ class ConnectViewModel(private val repository: CoffeeRepository) : ViewModel() {
         scheduleHelpAppear()
     }
 
+    // Show help message in two seconds if still in Waiting mode
     private fun scheduleHelpAppear() {
         viewModelScope.launch {
             delay(2000)

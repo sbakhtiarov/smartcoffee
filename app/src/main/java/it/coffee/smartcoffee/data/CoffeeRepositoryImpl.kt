@@ -17,6 +17,9 @@ class CoffeeRepositoryImpl(
                 async { database.getMachineInfo(machine_id) }
             )
 
+            // Always check network result first in case machine capabilities changed
+            // Use database cache if network is not available
+
             if (resultNetwork is Success) {
                 database.putMachineInfo(resultNetwork.value)
                 resultNetwork

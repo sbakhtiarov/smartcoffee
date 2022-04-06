@@ -28,7 +28,7 @@ class OverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val coffee = mainViewModel.coffee ?: error("Coffee not selected")
+        val coffee = requireNotNull(mainViewModel.coffee) { "Coffee not selected" }
 
         val summaryView = view.findViewById<LinearLayout>(R.id.summary_view)
 
