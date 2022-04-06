@@ -48,10 +48,14 @@ class OverviewFragment : Fragment() {
 
         coffee.extra.forEach { extra ->
 
+            val extraView = LinearLayout(requireContext())
+            extraView.orientation = LinearLayout.VERTICAL
+            extraView.showDividers = LinearLayout.SHOW_DIVIDER_NONE
+
             with (layoutInflater.inflate(R.layout.list_item, summaryView, false) as TextView) {
                 text = extra.name
                 setCompoundDrawablesWithIntrinsicBounds(CoffeeUtils.getExtraIcon(extra.id), 0, 0, 0)
-                summaryView.addView(this)
+                extraView.addView(this)
             }
 
             with (layoutInflater.inflate(R.layout.extra_choice_item, summaryView, false)) {
@@ -60,10 +64,11 @@ class OverviewFragment : Fragment() {
 
                 val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, resources.displayMetrics).toInt()
                 val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                lp.setMargins(margin, margin, margin, margin)
-                summaryView.addView(this, lp)
+                lp.setMargins(margin, 0, margin, margin)
+                extraView.addView(this, lp)
             }
 
+            summaryView.addView(extraView, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
         }
 
         view.findViewById<View>(R.id.button_done).setOnClickListener {
