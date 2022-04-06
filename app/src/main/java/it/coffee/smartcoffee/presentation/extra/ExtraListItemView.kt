@@ -3,20 +3,23 @@ package it.coffee.smartcoffee.presentation.extra
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
+import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.Transformation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.view.postDelayed
+import androidx.core.view.updateLayoutParams
 import it.coffee.smartcoffee.R
 
 class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
 
     private val title: TextView by lazy { findViewById(R.id.text_title) }
-    private val divider: View by lazy { findViewById(R.id.divider) }
-    private val choices: LinearLayout by lazy { findViewById(R.id.choices_view) }
+    private val choicesView: LinearLayout by lazy { findViewById(R.id.choices_view) }
+    private val choicesList: LinearLayout by lazy { findViewById(R.id.choices_list) }
 
     private var currentItem: ExtraListItem? = null
 
@@ -36,13 +39,64 @@ class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: Attri
         }
 
     private fun collapse() {
-        divider.isVisible = false
-        choices.isVisible = false
+
+        val actualHeight = choicesView.measuredHeight
+
+        val anim = object : Animation() {
+            override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
+                if (interpolatedTime == 1f) {
+                    choicesView.isVisible = false
+                } else {
+                    choicesView.updateLayoutParams {
+                        height = actualHeight - (actualHeight * interpolatedTime).toInt()
+                    }
+                    choicesView.requestLayout()
+                }
+            }
+        }
+
+        anim.duration = (actualHeight / resources.displayMetrics.density).toLong()
+        anim.startOffset = 100
+        choicesView.startAnimation(anim)
+
+        choicesList.animate().apply {
+            duration = 200
+            alpha(0f)
+        }
+
     }
 
     private fun expand() {
-        divider.isVisible = true
-        choices.isVisible = true
+
+        choicesView.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val actualHeight = choicesView.measuredHeight
+
+        choicesView.updateLayoutParams { height = 0 }
+        choicesView.isVisible = true
+        choicesList.alpha = 0f
+
+        val anim = object : Animation() {
+            override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
+
+                val viewHeight = if (interpolatedTime == 1f) {
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                } else {
+                    (actualHeight * interpolatedTime).toInt()
+                }
+
+                choicesView.updateLayoutParams { height = viewHeight }
+                choicesView.requestLayout()
+            }
+        }
+
+        anim.duration = (actualHeight / resources.displayMetrics.density).toLong()
+        choicesView.startAnimation(anim)
+
+        choicesList.animate().apply {
+            startDelay = 100
+            duration = 300
+            alpha(1f)
+        }
     }
 
     override fun onFinishInflate() {
@@ -58,7 +112,7 @@ class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: Attri
             currentItem = item
 
             item.choices.forEachIndexed { index, choiceItem ->
-                val choiceView = choices.getChildAt(index)
+                val choiceView = choicesList.getChildAt(index)
                 val extraIcon = choiceView.findViewById<ImageView>(R.id.image1)
 
                 if (choiceItem.selected) {
@@ -84,7 +138,7 @@ class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: Attri
         title.text = item.name
         title.setCompoundDrawablesWithIntrinsicBounds(item.icon, 0, 0, 0)
 
-        choices.removeAllViews()
+        choicesList.removeAllViews()
 
         val inflater = LayoutInflater.from(context)
 
@@ -106,7 +160,7 @@ class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: Attri
                 onSelection(it.id)
             }
 
-            choices.addView(choiceView)
+            choicesList.addView(choiceView)
         }
     }
 
