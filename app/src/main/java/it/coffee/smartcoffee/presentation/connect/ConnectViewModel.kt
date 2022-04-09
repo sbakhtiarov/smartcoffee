@@ -37,12 +37,12 @@ class ConnectViewModel(private val repository: CoffeeRepository) : ViewModel() {
         }
     }
 
-    fun getMachineInfo(machine_id: String) {
+    fun getMachineInfo(machineId: String) {
 
         _connectionState.value = Connecting
 
         viewModelScope.launch {
-            when (val result = repository.getMachineInfo(machine_id)) {
+            when (val result = repository.getMachineInfo(machineId)) {
                 is Success -> _connectionState.value = ConnectionSuccess(result.value)
                 is Failure -> _connectionState.value = ConnectionFailure(result)
             }

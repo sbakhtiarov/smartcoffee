@@ -49,11 +49,7 @@ class ExtraViewModel(private val style: CoffeeType, private val repository: Coff
             val newList = ArrayList<ExtraListItem>()
             oldList.forEach { extra ->
                 if (extra.id == extraId) {
-                    val choices = ArrayList<ExtraChoiceItem>()
-                    extra.choices.forEach { choice ->
-                        choices.add(choice.copy(selected = choice.id == choiceId))
-                    }
-                    newList.add(extra.copy(choices = choices))
+                    newList.add(extra.copy(choices = extra.choices.copy(choiceId)))
                 } else {
                     newList.add(extra)
                 }
@@ -61,6 +57,14 @@ class ExtraViewModel(private val style: CoffeeType, private val repository: Coff
 
             _items.value = newList
             _showNext.value = newList.all { it.choices.any { it.selected } }
+        }
+    }
+
+    private fun List<ExtraChoiceItem>.copy(selectedId: String): List<ExtraChoiceItem> {
+        return buildList {
+            this@copy.forEach {
+                add(it.copy(selected = it.id == selectedId))
+            }
         }
     }
 

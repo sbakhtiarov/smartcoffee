@@ -29,21 +29,12 @@ class OverviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val coffee = requireNotNull(mainViewModel.coffee) { "Coffee not selected" }
-
         val summaryView = view.findViewById<LinearLayout>(R.id.summary_view)
 
-        with (layoutInflater.inflate(R.layout.list_item, summaryView, false) as TextView) {
-            text = coffee.style.name
-            setCompoundDrawablesWithIntrinsicBounds(CoffeeUtils.getStyleIcon(coffee.style.id), 0, 0, 0)
-            summaryView.addView(this)
-        }
+        addListItem(summaryView, coffee.style.name, CoffeeUtils.getStyleIcon(coffee.style.id))
 
         coffee.size?.let { size ->
-            with (layoutInflater.inflate(R.layout.list_item, summaryView, false) as TextView) {
-                text = size.name
-                setCompoundDrawablesWithIntrinsicBounds(CoffeeUtils.getSizeIcon(size.id), 0, 0, 0)
-                summaryView.addView(this)
-            }
+            addListItem(summaryView, size.name, CoffeeUtils.getSizeIcon(size.id))
         }
 
         coffee.extra.forEach { extra ->
@@ -52,27 +43,40 @@ class OverviewFragment : Fragment() {
             extraView.orientation = LinearLayout.VERTICAL
             extraView.showDividers = LinearLayout.SHOW_DIVIDER_NONE
 
-            with (layoutInflater.inflate(R.layout.list_item, summaryView, false) as TextView) {
-                text = extra.name
-                setCompoundDrawablesWithIntrinsicBounds(CoffeeUtils.getExtraIcon(extra.id), 0, 0, 0)
-                extraView.addView(this)
-            }
+            addListItem(extraView, extra.name, CoffeeUtils.getExtraIcon(extra.id))
+            addExtraListItem(extraView, extra.subselections[0].name)
 
-            with (layoutInflater.inflate(R.layout.extra_choice_item, summaryView, false)) {
-                findViewById<TextView>(R.id.text1).text = extra.subselections[0].name
-                findViewById<ImageView>(R.id.image1).setImageResource(R.drawable.ic_extra_choice_selected)
-
-                val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, resources.displayMetrics).toInt()
-                val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                lp.setMargins(margin, 0, margin, margin)
-                extraView.addView(this, lp)
-            }
-
-            summaryView.addView(extraView, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+            summaryView.addView(extraView,
+                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT))
         }
 
         view.findViewById<View>(R.id.button_done).setOnClickListener {
             mainViewModel.confirmCoffee()
+        }
+    }
+
+    private fun addListItem(parent: ViewGroup, text: String, icon: Int) {
+        with(layoutInflater.inflate(R.layout.list_item, parent, false) as TextView) {
+            this.text = text
+            setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0)
+            parent.addView(this)
+        }
+    }
+
+    private fun addExtraListItem(parent: ViewGroup, text: String) {
+        with(layoutInflater.inflate(R.layout.extra_choice_item, parent, false)) {
+            findViewById<TextView>(R.id.text1).text = text
+            findViewById<ImageView>(R.id.image1).setImageResource(R.drawable.ic_extra_choice_selected)
+
+            val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                24f,
+                resources.displayMetrics).toInt()
+            val lp = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT)
+            lp.setMargins(margin, 0, margin, margin)
+            parent.addView(this, lp)
         }
     }
 

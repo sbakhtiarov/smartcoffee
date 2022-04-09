@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import it.coffee.smartcoffee.R
 import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.Failure
 import it.coffee.smartcoffee.domain.Success

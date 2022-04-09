@@ -48,10 +48,12 @@ class ConnectFragment : Fragment() {
                 }
                 is ConnectionFailure -> {
                     when (state.error) {
-                        is NetworkError -> Toast.makeText(requireContext(), getString(R.string.no_connection_error), Toast.LENGTH_SHORT).show()
-                        is UnknownError -> Toast.makeText(requireContext(), getString(R.string.unknown_error), Toast.LENGTH_SHORT).show()
+                        is NetworkError -> Toast.makeText(requireContext(),
+                            getString(R.string.no_connection_error), Toast.LENGTH_SHORT).show()
+                        is UnknownError -> Toast.makeText(requireContext(),
+                            getString(R.string.unknown_error), Toast.LENGTH_SHORT).show()
                     }
-                    viewModel.onErrorShown ()
+                    viewModel.onErrorShown()
                 }
                 is ConnectionSuccess -> {
                     progress.isVisible = false

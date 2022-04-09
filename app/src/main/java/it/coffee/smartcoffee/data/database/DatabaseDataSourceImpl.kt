@@ -11,7 +11,7 @@ import it.coffee.smartcoffee.domain.UnknownError
 import it.coffee.smartcoffee.domain.model.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import java.lang.IllegalStateException
+import java.io.IOException
 import java.util.NoSuchElementException
 
 class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
@@ -20,13 +20,14 @@ class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
         context,
         CoffeeMachineDatabase::class.java,
         "coffee_machine_db")
+        .fallbackToDestructiveMigration()
         .build()
 
-    override suspend fun getMachineInfo(machine_id: String): Result<CoffeeMachineInfo> {
+    override suspend fun getMachineInfo(machineId: String): Result<CoffeeMachineInfo> {
 
         return try {
 
-            val entity = db.coffeeMachineDao().getCoffeeMachine(machine_id)
+            val entity = db.coffeeMachineDao().getCoffeeMachine(machineId)
 
             val info = CoffeeMachineInfo(
                 id = entity.coffeeMachine.id,
@@ -48,7 +49,7 @@ class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
 
             Success(info)
 
-        } catch (e: Throwable) {
+        } catch (e: IOException) {
             UnknownError(e)
         }
 
@@ -89,13 +90,13 @@ class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
         }
     }
 
-    override suspend fun getTypes(machine_id: String): Result<List<CoffeeType>> {
+    override suspend fun getTypes(machineId: String): Result<List<CoffeeType>> {
         return try {
-            val types = db.coffeeMachineDao().getTypes(machine_id).map {
+            val types = db.coffeeMachineDao().getTypes(machineId).map {
                 CoffeeType(it.id, it.name, it.sizes, it.extras)
             }
             Success(types)
-        } catch (e: Throwable) {
+        } catch (e: IOException) {
             UnknownError(e)
         }
     }
@@ -106,7 +107,7 @@ class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
                 CoffeeSize(it.id, it.name)
             }
             Success(sizes)
-        } catch (e: Throwable) {
+        } catch (e: IOException) {
             UnknownError(e)
         }
     }
@@ -117,16 +118,16 @@ class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
                 CoffeeExtra(it.id, it.name, it.subselections)
             }
             Success(types)
-        } catch (e: Throwable) {
+        } catch (e: IOException) {
             UnknownError(e)
         }
     }
 
-    override suspend fun getRecentCoffee(machine_id: String): Result<Coffee> {
+    override suspend fun getRecentCoffee(machineId: String): Result<Coffee> {
 
         return try {
 
-            val entity = db.coffeeMachineDao().getRecentCoffee(machine_id)
+            val entity = db.coffeeMachineDao().getRecentCoffee(machineId)
 
             if (entity != null) {
                 coroutineScope {
@@ -148,14 +149,14 @@ class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
                 UnknownError(NoSuchElementException("No recent coffee"))
             }
 
-        } catch (e: Throwable) {
+        } catch (e: IOException) {
             UnknownError(e)
         }
     }
 
-    override suspend fun putRecentCoffee(machine_id: String, coffee: Coffee) {
+    override suspend fun putRecentCoffee(machineId: String, coffee: Coffee) {
         db.coffeeMachineDao().insertRecentCoffee(RecentCoffeeEntity(
-            machine_id,
+            machineId,
             coffee.style.id,
             coffee.size?.id ?: "",
             coffee.extra

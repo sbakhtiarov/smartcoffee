@@ -56,7 +56,8 @@ class StyleFragment : Fragment() {
             viewModel.recent.observe(viewLifecycleOwner) {
                 it?.let { coffee ->
                     coffeeView.text = coffee.style.name
-                    coffeeView.setCompoundDrawablesWithIntrinsicBounds(CoffeeUtils.getStyleIcon(coffee.style.id), 0, 0, 0)
+                    coffeeView.setCompoundDrawablesWithIntrinsicBounds(
+                        CoffeeUtils.getStyleIcon(coffee.style.id), 0, 0, 0)
 
                     coffeeView.setOnClickListener {
                         mainViewModel.repeatCoffee(coffee)

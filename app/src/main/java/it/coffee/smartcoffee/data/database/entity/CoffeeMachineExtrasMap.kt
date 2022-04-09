@@ -1,5 +1,6 @@
 package it.coffee.smartcoffee.data.database.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -26,6 +27,8 @@ import androidx.room.Index
     ]
 )
 data class CoffeeMachineExtrasMap(
-    val machine_id: String,
-    val extra_id: String
+    @ColumnInfo(name = "machine_id")
+    val machineId: String,
+    @ColumnInfo(name = "extra_id")
+    val extraId: String
 )

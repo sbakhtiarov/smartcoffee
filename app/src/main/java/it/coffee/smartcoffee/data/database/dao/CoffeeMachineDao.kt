@@ -30,15 +30,15 @@ interface CoffeeMachineDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecentCoffee(coffee: RecentCoffeeEntity)
 
-    @Query("SELECT * FROM recent_coffee WHERE machine_id = :machine_id")
-    suspend fun getRecentCoffee(machine_id: String): RecentCoffeeEntity?
+    @Query("SELECT * FROM recent_coffee WHERE machine_id = :machineId")
+    suspend fun getRecentCoffee(machineId: String): RecentCoffeeEntity?
 
     @Transaction
-    @Query("SELECT * FROM coffee_machine WHERE id = :machine_id")
-    suspend fun getCoffeeMachine(machine_id: String): CoffeeMachineJoinedEntity
+    @Query("SELECT * FROM coffee_machine WHERE id = :machineId")
+    suspend fun getCoffeeMachine(machineId: String): CoffeeMachineJoinedEntity
 
-    @Query("SELECT * FROM coffee_types WHERE id IN (SELECT types_map.type_id FROM types_map WHERE types_map.machine_id = :machine_id)")
-    suspend fun getTypes(machine_id: String): List<CoffeeTypeEntity>
+    @Query("SELECT * FROM coffee_types WHERE id IN (SELECT types_map.type_id FROM types_map WHERE types_map.machine_id = :machineId)")
+    suspend fun getTypes(machineId: String): List<CoffeeTypeEntity>
 
     @Query("SELECT * FROM coffee_sizes WHERE id IN (:sizes)")
     suspend fun getSizes(sizes: List<String>): List<CoffeeSizeEntity>
@@ -46,10 +46,10 @@ interface CoffeeMachineDao {
     @Query("SELECT * FROM coffee_extras WHERE id IN (:extras)")
     suspend fun getExtras(extras: List<String>): List<CoffeeExtraEntity>
 
-    @Query("SELECT * FROM coffee_types WHERE id = :style_id")
-    suspend fun getStyle(style_id: String) : CoffeeTypeEntity
+    @Query("SELECT * FROM coffee_types WHERE id = :styleId")
+    suspend fun getStyle(styleId: String) : CoffeeTypeEntity
 
-    @Query("SELECT * FROM coffee_sizes WHERE id = :size_id")
-    suspend fun getSize(size_id: String) : CoffeeSizeEntity
+    @Query("SELECT * FROM coffee_sizes WHERE id = :sizeId")
+    suspend fun getSize(sizeId: String) : CoffeeSizeEntity
 
 }

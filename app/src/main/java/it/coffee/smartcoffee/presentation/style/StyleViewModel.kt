@@ -5,18 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import it.coffee.smartcoffee.R
 import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.Failure
-import it.coffee.smartcoffee.domain.NetworkError
 import it.coffee.smartcoffee.domain.Success
-import it.coffee.smartcoffee.domain.UnknownError
 import it.coffee.smartcoffee.domain.model.Coffee
 import it.coffee.smartcoffee.domain.model.CoffeeType
 import it.coffee.smartcoffee.presentation.CoffeeUtils
 import kotlinx.coroutines.launch
 
-class StyleViewModel(private val machine_id: String, private val repository: CoffeeRepository) : ViewModel() {
+class StyleViewModel(private val machineId: String, private val repository: CoffeeRepository) : ViewModel() {
 
     private val _items = MutableLiveData<List<StyleListItem>>()
     val items : LiveData<List<StyleListItem>> = _items
@@ -28,7 +25,7 @@ class StyleViewModel(private val machine_id: String, private val repository: Cof
 
     init {
         viewModelScope.launch {
-            when (val result = repository.getTypes(machine_id)) {
+            when (val result = repository.getTypes(machineId)) {
                 is Success -> {
                     styles = result.value
                     _items.value = styles?.map {
@@ -38,7 +35,7 @@ class StyleViewModel(private val machine_id: String, private val repository: Cof
                 is Failure -> error(result.exception)
             }
 
-            when (val result = repository.getRecentCoffee(machine_id)) {
+            when (val result = repository.getRecentCoffee(machineId)) {
                 is Success -> _recent.value = result.value
                 is Failure -> { }
             }

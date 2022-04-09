@@ -4,6 +4,6 @@ import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
 
 interface NetworkDataSource {
 
-    suspend fun getMachineInfo(machine_id: String) : Result<CoffeeMachineInfo>
+    suspend fun getMachineInfo(machineId: String) : Result<CoffeeMachineInfo>
 
 }

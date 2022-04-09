@@ -6,7 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.coffee.smartcoffee.R
 import it.coffee.smartcoffee.domain.CoffeeRepository
-import it.coffee.smartcoffee.domain.model.*
+import it.coffee.smartcoffee.domain.model.Coffee
+import it.coffee.smartcoffee.domain.model.CoffeeExtra
+import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
+import it.coffee.smartcoffee.domain.model.CoffeeType
+import it.coffee.smartcoffee.domain.model.CoffeeSize
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: CoffeeRepository): ViewModel() {

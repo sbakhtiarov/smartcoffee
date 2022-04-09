@@ -12,6 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import java.io.IOException
 
 class NetworkDataSourceImpl : NetworkDataSource {
 
@@ -39,10 +40,10 @@ class NetworkDataSourceImpl : NetworkDataSource {
         coffeeApi = retrofit.create(CoffeeApi::class.java)
     }
 
-    override suspend fun getMachineInfo(machine_id: String): Result<CoffeeMachineInfo> {
+    override suspend fun getMachineInfo(machineId: String): Result<CoffeeMachineInfo> {
         return try {
-            Success(coffeeApi.getMachineInfo(machine_id))
-        } catch (e: Throwable) {
+            Success(coffeeApi.getMachineInfo(machineId))
+        } catch (e: IOException) {
             NetworkError(e)
         }
     }
@@ -51,6 +52,6 @@ class NetworkDataSourceImpl : NetworkDataSource {
 interface CoffeeApi {
 
     @GET("/coffee-machine/{machine_id}")
-    suspend fun getMachineInfo(@Path("machine_id") machine_id: String) : CoffeeMachineInfo
+    suspend fun getMachineInfo(@Path("machine_id") machineId: String) : CoffeeMachineInfo
 
 }

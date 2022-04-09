@@ -37,7 +37,7 @@ class SmartCoffeeApp : Application() {
 
         viewModel { MainViewModel(get()) }
         viewModel { ConnectViewModel(get()) }
-        viewModel { parameters-> StyleViewModel(machine_id = parameters.get(), get()) }
+        viewModel { parameters-> StyleViewModel(machineId = parameters.get(), get()) }
         viewModel { parameters-> SizeViewModel(style = parameters.get(), get()) }
         viewModel { parameters-> ExtraViewModel(style = parameters.get(), get()) }
     }
