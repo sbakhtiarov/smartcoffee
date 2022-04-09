@@ -3,108 +3,62 @@ package it.coffee.smartcoffee.presentation.extra
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.Transformation
+import android.view.View
+import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.core.view.postDelayed
-import androidx.core.view.updateLayoutParams
 import it.coffee.smartcoffee.R
+import it.coffee.smartcoffee.presentation.widget.ExpandableListItemView
 
+@Suppress("MagicNumber")
 class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    LinearLayout(context, attrs) {
+    ExpandableListItemView(context, attrs) {
+
+    override val collapseAnimationStartOffset = 150L
+    override val expandInterpolator = OvershootInterpolator()
 
     private val title: TextView by lazy { findViewById(R.id.text_title) }
-    private val choicesView: LinearLayout by lazy { findViewById(R.id.choices_view) }
+    private val divider: View by lazy { findViewById(R.id.divider) }
     private val choicesList: LinearLayout by lazy { findViewById(R.id.choices_list) }
 
     private var currentItem: ExtraListItem? = null
 
     var callback: ((extraId: String, choiceId: String) -> Unit)? = null
 
-    private var isExpanded: Boolean = false
-        set(value) {
-            if (value != field) {
-                field = value
+    override fun animateCollapse() {
 
-                if (field) {
-                    expand()
-                } else {
-                    collapse()
-                }
-            }
+        divider.animate().apply {
+            duration = 200
+            alpha(0f)
         }
-
-    private fun collapse() {
-
-        val actualHeight = choicesView.measuredHeight
-
-        val anim = object : Animation() {
-            override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
-                if (interpolatedTime == 1f) {
-                    choicesView.isVisible = false
-                } else {
-                    choicesView.updateLayoutParams {
-                        height = actualHeight - (actualHeight * interpolatedTime).toInt()
-                    }
-                    choicesView.requestLayout()
-                }
-            }
-        }
-
-        anim.duration = (actualHeight / resources.displayMetrics.density).toLong()
-        anim.startOffset = 100
-        choicesView.startAnimation(anim)
 
         choicesList.animate().apply {
             duration = 200
             alpha(0f)
         }
 
+        super.animateCollapse()
     }
 
-    private fun expand() {
+    override fun animateExpand() {
 
-        choicesView.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        val actualHeight = choicesView.measuredHeight
-
-        choicesView.updateLayoutParams { height = 0 }
-        choicesView.isVisible = true
-        choicesList.alpha = 0f
-
-        val anim = object : Animation() {
-            override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
-
-                val viewHeight = if (interpolatedTime == 1f) {
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                } else {
-                    (actualHeight * interpolatedTime).toInt()
-                }
-
-                choicesView.updateLayoutParams { height = viewHeight }
-                choicesView.requestLayout()
-            }
-        }
-
-        anim.duration = (actualHeight / resources.displayMetrics.density).toLong()
-        choicesView.startAnimation(anim)
-
-        choicesList.animate().apply {
-            startDelay = 100
+        divider.alpha = 0f
+        divider.animate().apply {
+            startDelay = 150
             duration = 300
             alpha(1f)
         }
-    }
 
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-
-        setOnClickListener {
-            isExpanded = !isExpanded
+        choicesList.alpha = 0f
+        choicesList.animate().apply {
+            startDelay = 150
+            duration = 300
+            alpha(1f)
         }
+
+        super.animateExpand()
     }
 
     fun bind(item: ExtraListItem, payloads: List<Any?>) {
