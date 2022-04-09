@@ -3,13 +3,12 @@ package it.coffee.smartcoffee.presentation.extra
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.view.postDelayed
 import it.coffee.smartcoffee.R
+import it.coffee.smartcoffee.databinding.ExtraChoiceItemBinding
+import it.coffee.smartcoffee.databinding.ExtraListItemBinding
 import it.coffee.smartcoffee.presentation.widget.ExpandableListItemView
 
 @Suppress("MagicNumber")
@@ -19,22 +18,25 @@ class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: Attri
     override val collapseAnimationStartOffset = 150L
     override val expandInterpolator = OvershootInterpolator()
 
-    private val title: TextView by lazy { findViewById(R.id.text_title) }
-    private val divider: View by lazy { findViewById(R.id.divider) }
-    private val choicesList: LinearLayout by lazy { findViewById(R.id.choices_list) }
+    private lateinit var binding: ExtraListItemBinding
 
     private var currentItem: ExtraListItem? = null
 
     var callback: ((extraId: String, choiceId: String) -> Unit)? = null
 
+    override fun onFinishInflate() {
+        super.onFinishInflate()
+        binding = ExtraListItemBinding.bind(this)
+    }
+
     override fun animateCollapse() {
 
-        divider.animate().apply {
+        binding.divider.animate().apply {
             duration = 200
             alpha(0f)
         }
 
-        choicesList.animate().apply {
+        binding.choicesList.animate().apply {
             duration = 200
             alpha(0f)
         }
@@ -44,15 +46,15 @@ class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: Attri
 
     override fun animateExpand() {
 
-        divider.alpha = 0f
-        divider.animate().apply {
+        binding.divider.alpha = 0f
+        binding.divider.animate().apply {
             startDelay = 150
             duration = 300
             alpha(1f)
         }
 
-        choicesList.alpha = 0f
-        choicesList.animate().apply {
+        binding.choicesList.alpha = 0f
+        binding.choicesList.animate().apply {
             startDelay = 150
             duration = 300
             alpha(1f)
@@ -66,8 +68,8 @@ class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: Attri
             currentItem = item
 
             item.choices.forEachIndexed { index, choiceItem ->
-                val choiceView = choicesList.getChildAt(index)
-                val extraIcon = choiceView.findViewById<ImageView>(R.id.image1)
+                val choiceView = binding.choicesList.getChildAt(index)
+                val extraIcon = choiceView.findViewById<ImageView>(R.id.image_check)
 
                 if (choiceItem.selected) {
                     extraIcon.setImageResource(R.drawable.ic_extra_choice_selected)
@@ -89,32 +91,30 @@ class ExtraListItemView @JvmOverloads constructor(context: Context, attrs: Attri
 
         currentItem = item
 
-        title.text = item.name
-        title.setCompoundDrawablesWithIntrinsicBounds(item.icon, 0, 0, 0)
+        binding.textTitle.text = item.name
+        binding.textTitle.setCompoundDrawablesWithIntrinsicBounds(item.icon, 0, 0, 0)
 
-        choicesList.removeAllViews()
+        binding.choicesList.removeAllViews()
 
         val inflater = LayoutInflater.from(context)
 
         currentItem?.choices?.forEach {
-            val choiceView = inflater.inflate(R.layout.extra_choice_item, this, false)
 
-            val extraText = choiceView.findViewById<TextView>(R.id.text1)
-            val extraIcon = choiceView.findViewById<ImageView>(R.id.image1)
+            val choiceView = ExtraChoiceItemBinding.inflate(inflater, binding.choicesList, false)
 
-            extraText.text = it.name
+            choiceView.textTitle.text = it.name
 
             if (it.selected) {
-                extraIcon.setImageResource(R.drawable.ic_extra_choice_selected)
+                choiceView.imageCheck.setImageResource(R.drawable.ic_extra_choice_selected)
             } else {
-                extraIcon.setImageResource(R.drawable.ic_extra_choice)
+                choiceView.imageCheck.setImageResource(R.drawable.ic_extra_choice)
             }
 
-            choiceView.setOnClickListener { _ ->
+            choiceView.root.setOnClickListener { _ ->
                 onSelection(it.id)
             }
 
-            choicesList.addView(choiceView)
+            binding.choicesList.addView(choiceView.root)
         }
     }
 

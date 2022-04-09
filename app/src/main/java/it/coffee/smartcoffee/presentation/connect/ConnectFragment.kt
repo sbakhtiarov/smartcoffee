@@ -8,29 +8,23 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import it.coffee.smartcoffee.R
+import it.coffee.smartcoffee.databinding.ConnectFragmentBinding
 import it.coffee.smartcoffee.domain.NetworkError
 import it.coffee.smartcoffee.domain.UnknownError
 import it.coffee.smartcoffee.presentation.main.MainViewModel
+import it.coffee.smartcoffee.util.viewBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ConnectFragment : Fragment() {
+class ConnectFragment : Fragment(R.layout.connect_fragment) {
 
     private val mainViewModel: MainViewModel by sharedViewModel()
     private val viewModel: ConnectViewModel by viewModel()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.connect_fragment, container, false)
-    }
+    private val binding by viewBinding(ConnectFragmentBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val progress = view.findViewById<View>(R.id.progress)
-        val tapText = view.findViewById<View>(R.id.text_screen_tap)
 
         viewModel.connectionState.observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -39,12 +33,12 @@ class ConnectFragment : Fragment() {
                         viewModel.getMachineInfo("60ba1ab72e35f2d9c786c610") // Hardcoded test machine id
                         view.setOnClickListener(null)
                     }
-                    progress.isVisible = false
-                    tapText.isVisible = state.showHelp
+                    binding.progress.isVisible = false
+                    binding.textScreenTap.isVisible = state.showHelp
                 }
                 Connecting -> {
-                    progress.isVisible = true
-                    tapText.isVisible = false
+                    binding.progress.isVisible = true
+                    binding.textScreenTap.isVisible = false
                 }
                 is ConnectionFailure -> {
                     when (state.error) {
@@ -56,8 +50,8 @@ class ConnectFragment : Fragment() {
                     viewModel.onErrorShown()
                 }
                 is ConnectionSuccess -> {
-                    progress.isVisible = false
-                    tapText.isVisible = false
+                    binding.progress.isVisible = false
+                    binding.textScreenTap.isVisible = false
 
                     viewModel.onConnectHandled()
                     mainViewModel.onConnected(state.machineInfo)

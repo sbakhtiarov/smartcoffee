@@ -7,19 +7,15 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import it.coffee.smartcoffee.R
+import it.coffee.smartcoffee.databinding.EnjoyFragmentBinding
 import it.coffee.smartcoffee.presentation.main.MainViewModel
+import it.coffee.smartcoffee.util.viewBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class EnjoyFragment : Fragment() {
+class EnjoyFragment : Fragment(R.layout.enjoy_fragment) {
 
     private val mainViewModel: MainViewModel by sharedViewModel()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.enjoy_fragment, container, false)
-    }
+    private val binding by viewBinding(EnjoyFragmentBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,7 +27,7 @@ class EnjoyFragment : Fragment() {
                 }
             })
 
-        view.findViewById<View>(R.id.button_new_coffee).setOnClickListener {
+        binding.buttonNewCoffee.setOnClickListener {
             mainViewModel.restartCoffeeBuilder()
         }
 
