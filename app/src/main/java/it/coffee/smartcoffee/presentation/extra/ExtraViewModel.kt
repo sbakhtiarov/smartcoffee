@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.Failure
@@ -23,14 +24,12 @@ class ExtraViewModel(
     private val _items = MutableLiveData<List<ExtraListItem>>()
     val items: LiveData<List<ExtraListItem>> = _items
 
-    private val _showNext = MutableLiveData(false)
-    val showNext: LiveData<Boolean> = _showNext
+    val showNext: LiveData<Boolean> = items.map { it.allExtrasSelected() }
 
     private var extras: List<CoffeeExtra>? = null
 
     init {
         viewModelScope.launch {
-
             when (val result = repository.getExtras(style.extras ?: error("No extras defined"))) {
                 is Success -> {
                     extras = result.value
@@ -43,17 +42,15 @@ class ExtraViewModel(
 
     fun onChoice(extraId: String, choiceId: String) {
         _items.value?.let { oldList ->
-            val newList = ArrayList<ExtraListItem>()
-            oldList.forEach { extra ->
-                if (extra.id == extraId) {
-                    newList.add(extra.copy(choices = extra.choices.copy(choiceId)))
-                } else {
-                    newList.add(extra)
+            _items.value = buildList {
+                oldList.forEach { extra ->
+                    if (extra.id == extraId) {
+                        add(extra.copy(choices = extra.choices.copy(choiceId)))
+                    } else {
+                        add(extra)
+                    }
                 }
             }
-
-            _items.value = newList
-            _showNext.value = newList.allExtrasSelected()
         }
     }
 
@@ -70,19 +67,15 @@ class ExtraViewModel(
     }
 
     fun getChoices(): List<CoffeeExtra> {
+        return buildList {
+            _items.value?.forEach { item ->
+                val extra = extras?.find { it.id == item.id } ?: error("Item not found")
+                val selectedItem =
+                    item.choices.find { it.selected }?.id ?: error("Selected item not found")
 
-        val choices = ArrayList<CoffeeExtra>()
-
-        _items.value?.forEach { item ->
-
-            val extra = extras?.find { it.id == item.id } ?: error("Item not found")
-            val selectedItem =
-                item.choices.find { it.selected }?.id ?: error("Selected item not found")
-
-            choices.add(extra.copy(subselections = extra.subselections.filter { it.id == selectedItem }))
+                add(extra.copy(subselections = extra.subselections.filter { it.id == selectedItem }))
+            }
         }
-
-        return choices
     }
 }
 

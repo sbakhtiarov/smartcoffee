@@ -41,7 +41,7 @@ class ExtraFragment : Fragment() {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.list)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = ExtraListAdapter() { extraId, choiceId ->
+        val adapter = ExtraListAdapter { extraId, choiceId ->
            viewModel.onChoice(extraId, choiceId)
         }
         recyclerView.adapter = adapter
