@@ -10,11 +10,15 @@ import it.coffee.smartcoffee.domain.Failure
 import it.coffee.smartcoffee.domain.Success
 import it.coffee.smartcoffee.domain.model.CoffeeExtra
 import it.coffee.smartcoffee.domain.model.CoffeeType
+import it.coffee.smartcoffee.domain.model.ExtraChoice
 import it.coffee.smartcoffee.presentation.CoffeeUtils
 import kotlinx.coroutines.launch
 
-class ExtraViewModel(private val style: CoffeeType, private val repository: CoffeeRepository) :
-    ViewModel() {
+class ExtraViewModel(
+    private val style: CoffeeType,
+    private val repository: CoffeeRepository,
+    private val mapper: ExtraViewModelMapper = ExtraViewModelMapper(),
+) : ViewModel() {
 
     private val _items = MutableLiveData<List<ExtraListItem>>()
     val items: LiveData<List<ExtraListItem>> = _items
@@ -29,15 +33,8 @@ class ExtraViewModel(private val style: CoffeeType, private val repository: Coff
 
             when (val result = repository.getExtras(style.extras ?: error("No extras defined"))) {
                 is Success -> {
-
                     extras = result.value
-
-                    _items.value = result.value.map {
-                        ExtraListItem(it.id, CoffeeUtils.getExtraIcon(it.id), it.name, it.subselections.map { choice ->
-                            ExtraChoiceItem(choice.id, choice.name)
-                        })
-                    }
-
+                    _items.value = result.value.map { mapper.map(it) }
                 }
                 is Failure -> error(result.exception)
             }
@@ -75,7 +72,8 @@ class ExtraViewModel(private val style: CoffeeType, private val repository: Coff
         _items.value?.forEach { item ->
 
             val extra = extras?.find { it.id == item.id } ?: error("Item not found")
-            val selectedItem = item.choices.find { it.selected }?.id ?: error("Selected item not found")
+            val selectedItem =
+                item.choices.find { it.selected }?.id ?: error("Selected item not found")
 
             choices.add(extra.copy(subselections = extra.subselections.filter { it.id == selectedItem }))
         }
@@ -92,3 +90,15 @@ data class ExtraListItem(
     val name: String,
     val choices: List<ExtraChoiceItem>,
 )
+
+class ExtraViewModelMapper {
+    fun map(extra: CoffeeExtra) =
+        ExtraListItem(extra.id,
+            CoffeeUtils.getExtraIcon(extra.id),
+            extra.name,
+            extra.subselections.map { choice ->
+                map(choice)
+            })
+
+    fun map(choice: ExtraChoice) = ExtraChoiceItem(choice.id, choice.name)
+}
