@@ -7,7 +7,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import it.coffee.smartcoffee.R
 
-class StylesAdapter(private val items: List<StyleListItem>, private val listener: (style: StyleListItem) -> Unit) : RecyclerView.Adapter<StylesAdapter.StyleViewHolder>() {
+class StylesAdapter(
+    private val items: List<StyleListItem>,
+    private val listener: (style: StyleListItem) -> Unit,
+) : RecyclerView.Adapter<StylesAdapter.StyleViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StyleViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)

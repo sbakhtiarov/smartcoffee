@@ -7,11 +7,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import it.coffee.smartcoffee.R
 
-class SizesAdapter (private val items: List<SizeListItem>, private val listener: (style: SizeListItem) -> Unit) : RecyclerView.Adapter<SizesAdapter.SizeViewHolder>() {
-
-    class SizeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView as TextView
-    }
+class SizesAdapter(
+    private val items: List<SizeListItem>,
+    private val listener: (style: SizeListItem) -> Unit,
+) : RecyclerView.Adapter<SizesAdapter.SizeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SizeViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
@@ -27,5 +26,9 @@ class SizesAdapter (private val items: List<SizeListItem>, private val listener:
     }
 
     override fun getItemCount() = items.size
+
+    class SizeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textView: TextView = itemView as TextView
+    }
 
 }

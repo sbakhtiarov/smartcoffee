@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import it.coffee.smartcoffee.R
 
-class ExtraListAdapter(private val callback: (extraId: String, choiceId: String) -> Unit) : ListAdapter<ExtraListItem, ExtraListAdapter.ExtraViewHolder>(ExtraDiffCallback)  {
+class ExtraListAdapter(private val callback: (extraId: String, choiceId: String) -> Unit) :
+    ListAdapter<ExtraListItem, ExtraListAdapter.ExtraViewHolder>(ExtraDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExtraViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.extra_list_item, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.extra_list_item, parent, false)
         return ExtraViewHolder(view)
     }
 
@@ -22,7 +24,7 @@ class ExtraListAdapter(private val callback: (extraId: String, choiceId: String)
     override fun onBindViewHolder(
         holder: ExtraViewHolder,
         position: Int,
-        payloads: MutableList<Any>
+        payloads: MutableList<Any>,
     ) {
         with((holder.itemView as ExtraListItemView)) {
             bind(getItem(position), payloads)
