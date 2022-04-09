@@ -3,16 +3,27 @@ package it.coffee.smartcoffee.data.database
 import android.content.Context
 import androidx.room.Room
 import androidx.room.withTransaction
-import it.coffee.smartcoffee.data.database.entity.*
+import it.coffee.smartcoffee.data.database.entity.CoffeeExtraEntity
+import it.coffee.smartcoffee.data.database.entity.CoffeeMachineEntity
+import it.coffee.smartcoffee.data.database.entity.CoffeeMachineExtrasMap
+import it.coffee.smartcoffee.data.database.entity.CoffeeMachineSizesMap
+import it.coffee.smartcoffee.data.database.entity.CoffeeMachineTypesMap
+import it.coffee.smartcoffee.data.database.entity.CoffeeSizeEntity
+import it.coffee.smartcoffee.data.database.entity.CoffeeTypeEntity
+import it.coffee.smartcoffee.data.database.entity.RecentCoffeeEntity
 import it.coffee.smartcoffee.domain.DatabaseDataSource
 import it.coffee.smartcoffee.domain.Result
 import it.coffee.smartcoffee.domain.Success
 import it.coffee.smartcoffee.domain.UnknownError
-import it.coffee.smartcoffee.domain.model.*
+import it.coffee.smartcoffee.domain.model.Coffee
+import it.coffee.smartcoffee.domain.model.CoffeeExtra
+import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
+import it.coffee.smartcoffee.domain.model.CoffeeSize
+import it.coffee.smartcoffee.domain.model.CoffeeType
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import java.io.IOException
-import java.util.NoSuchElementException
+import java.lang.IllegalStateException
 
 class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
 
@@ -28,6 +39,7 @@ class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
         return try {
 
             val entity = db.coffeeMachineDao().getCoffeeMachine(machineId)
+                ?: error("Machine not found")
 
             val info = CoffeeMachineInfo(
                 id = entity.coffeeMachine.id,
@@ -51,9 +63,9 @@ class DatabaseDataSourceImpl(context: Context) : DatabaseDataSource {
 
         } catch (e: IOException) {
             UnknownError(e)
+        } catch (e: IllegalStateException) {
+            UnknownError(e)
         }
-
-
     }
 
     override suspend fun putMachineInfo(info: CoffeeMachineInfo) {

@@ -35,7 +35,7 @@ interface CoffeeMachineDao {
 
     @Transaction
     @Query("SELECT * FROM coffee_machine WHERE id = :machineId")
-    suspend fun getCoffeeMachine(machineId: String): CoffeeMachineJoinedEntity
+    suspend fun getCoffeeMachine(machineId: String): CoffeeMachineJoinedEntity?
 
     @Query("SELECT * FROM coffee_types WHERE id IN (SELECT types_map.type_id FROM types_map WHERE types_map.machine_id = :machineId)")
     suspend fun getTypes(machineId: String): List<CoffeeTypeEntity>

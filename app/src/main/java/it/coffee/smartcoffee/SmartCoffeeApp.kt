@@ -1,9 +1,11 @@
 package it.coffee.smartcoffee
 
 import android.app.Application
+import it.coffee.smartcoffee.data.CoffeeMachineConnectionImpl
 import it.coffee.smartcoffee.data.CoffeeRepositoryImpl
 import it.coffee.smartcoffee.data.database.DatabaseDataSourceImpl
 import it.coffee.smartcoffee.data.network.NetworkDataSourceImpl
+import it.coffee.smartcoffee.domain.CoffeeMachineConnection
 import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.DatabaseDataSource
 import it.coffee.smartcoffee.domain.NetworkDataSource
@@ -35,8 +37,12 @@ class SmartCoffeeApp : Application() {
             CoffeeRepositoryImpl(get(), get(), Dispatchers.IO)
         }
 
+        single<CoffeeMachineConnection> {
+            CoffeeMachineConnectionImpl()
+        }
+
         viewModel { MainViewModel(get()) }
-        viewModel { ConnectViewModel(get()) }
+        viewModel { ConnectViewModel(get(), get()) }
         viewModel { parameters-> StyleViewModel(machineId = parameters.get(), get()) }
         viewModel { parameters-> SizeViewModel(style = parameters.get(), get()) }
         viewModel { parameters-> ExtraViewModel(style = parameters.get(), get()) }

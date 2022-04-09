@@ -1,9 +1,7 @@
 package it.coffee.smartcoffee.presentation.connect
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -30,7 +28,7 @@ class ConnectFragment : Fragment(R.layout.connect_fragment) {
             when (state) {
                 is Waiting -> {
                     view.setOnClickListener {
-                        viewModel.getMachineInfo("60ba1ab72e35f2d9c786c610") // Hardcoded test machine id
+                        viewModel.connect()
                         view.setOnClickListener(null)
                     }
                     binding.progress.isVisible = false
