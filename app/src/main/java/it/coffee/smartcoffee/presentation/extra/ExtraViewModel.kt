@@ -53,8 +53,12 @@ class ExtraViewModel(
             }
 
             _items.value = newList
-            _showNext.value = newList.all { it.choices.any { it.selected } }
+            _showNext.value = newList.allExtrasSelected()
         }
+    }
+
+    private fun List<ExtraListItem>.allExtrasSelected(): Boolean {
+        return all { extra -> extra.choices.any { it.selected } }
     }
 
     private fun List<ExtraChoiceItem>.copy(selectedId: String): List<ExtraChoiceItem> {
@@ -100,5 +104,5 @@ class ExtraViewModelMapper {
                 map(choice)
             })
 
-    fun map(choice: ExtraChoice) = ExtraChoiceItem(choice.id, choice.name)
+    private fun map(choice: ExtraChoice) = ExtraChoiceItem(choice.id, choice.name)
 }

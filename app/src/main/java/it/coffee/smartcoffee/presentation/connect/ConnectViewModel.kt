@@ -30,6 +30,7 @@ class ConnectViewModel(private val repository: CoffeeRepository) : ViewModel() {
     // Show help message in two seconds if still in Waiting mode
     private fun scheduleHelpAppear() {
         viewModelScope.launch {
+            @Suppress("MagicNumber")
             delay(2000)
             if (_connectionState.value is Waiting) {
                 _connectionState.value = Waiting(true)
