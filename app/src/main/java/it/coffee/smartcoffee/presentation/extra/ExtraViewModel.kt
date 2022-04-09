@@ -22,7 +22,7 @@ class ExtraViewModel(private val style: CoffeeType, private val repository: Coff
     private val _showNext = MutableLiveData(false)
     val showNext: LiveData<Boolean> = _showNext
 
-    private var extras: HashSet<CoffeeExtra>? = null
+    private var extras: List<CoffeeExtra>? = null
 
     init {
         viewModelScope.launch {
@@ -30,12 +30,12 @@ class ExtraViewModel(private val style: CoffeeType, private val repository: Coff
             when (val result = repository.getExtras(style.extras ?: error("No extras defined"))) {
                 is Success -> {
 
-                    extras = result.value.toHashSet()
+                    extras = result.value
 
                     _items.value = result.value.map {
                         ExtraListItem(it.id, CoffeeUtils.getExtraIcon(it.id), it.name, it.subselections.map { choice ->
                             ExtraChoiceItem(choice.id, choice.name)
-                        }.toMutableSet())
+                        })
                     }
 
                 }
@@ -49,7 +49,7 @@ class ExtraViewModel(private val style: CoffeeType, private val repository: Coff
             val newList = ArrayList<ExtraListItem>()
             oldList.forEach { extra ->
                 if (extra.id == extraId) {
-                    val choices = HashSet<ExtraChoiceItem>()
+                    val choices = ArrayList<ExtraChoiceItem>()
                     extra.choices.forEach { choice ->
                         choices.add(choice.copy(selected = choice.id == choiceId))
                     }
@@ -86,5 +86,5 @@ data class ExtraListItem(
     val id: String,
     @DrawableRes val icon: Int,
     val name: String,
-    val choices: MutableSet<ExtraChoiceItem>,
+    val choices: List<ExtraChoiceItem>,
 )
