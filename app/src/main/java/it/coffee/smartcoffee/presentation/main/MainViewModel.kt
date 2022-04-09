@@ -1,19 +1,24 @@
 package it.coffee.smartcoffee.presentation.main
 
+import android.nfc.Tag
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.coffee.smartcoffee.R
+import it.coffee.smartcoffee.domain.CoffeeMachineConnection
 import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.model.Coffee
 import it.coffee.smartcoffee.domain.model.CoffeeExtra
 import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
-import it.coffee.smartcoffee.domain.model.CoffeeType
 import it.coffee.smartcoffee.domain.model.CoffeeSize
+import it.coffee.smartcoffee.domain.model.CoffeeType
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val repository: CoffeeRepository): ViewModel() {
+class MainViewModel(
+    private val repository: CoffeeRepository,
+    private val coffeeMachine: CoffeeMachineConnection,
+) : ViewModel() {
 
     var machineInfo: CoffeeMachineInfo? = null
     var coffee: Coffee? = null
@@ -24,11 +29,15 @@ class MainViewModel(private val repository: CoffeeRepository): ViewModel() {
     private val _navigate = MutableLiveData<Int?>()
     val navigate: LiveData<Int?> = _navigate
 
+    private val _enableNfc = MutableLiveData(true)
+    val enableNfc: LiveData<Boolean> = _enableNfc
+
     fun onNavigateComplete() {
         _navigate.value = null
     }
 
     fun onConnected(machineInfo: CoffeeMachineInfo) {
+        _enableNfc.value = false
         this.machineInfo = machineInfo
         _navigate.value = R.id.action_navigation_connect_to_style
     }
@@ -78,5 +87,15 @@ class MainViewModel(private val repository: CoffeeRepository): ViewModel() {
     fun repeatCoffee(coffee: Coffee) {
         this.coffee = coffee
         _navigate.value = R.id.action_navigate_style_to_overview
+    }
+
+    fun onNfcTagRead(tag: Tag) {
+        viewModelScope.launch {
+            coffeeMachine.onNfcTagRead(tag)
+        }
+    }
+
+    suspend fun resetConnection() {
+        coffeeMachine.resetConnection()
     }
 }

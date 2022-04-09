@@ -28,7 +28,7 @@ class ConnectFragment : Fragment(R.layout.connect_fragment) {
             when (state) {
                 is Waiting -> {
                     view.setOnClickListener {
-                        viewModel.connect()
+                        viewModel.forceConnect()
                         view.setOnClickListener(null)
                     }
                     binding.progress.isVisible = false

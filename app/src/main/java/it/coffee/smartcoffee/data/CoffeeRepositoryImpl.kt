@@ -1,20 +1,32 @@
 package it.coffee.smartcoffee.data
 
-import it.coffee.smartcoffee.domain.*
-import it.coffee.smartcoffee.domain.model.*
-import kotlinx.coroutines.*
+import it.coffee.smartcoffee.domain.CoffeeRepository
+import it.coffee.smartcoffee.domain.DatabaseDataSource
+import it.coffee.smartcoffee.domain.NetworkDataSource
+import it.coffee.smartcoffee.domain.Result
+import it.coffee.smartcoffee.domain.Success
+import it.coffee.smartcoffee.domain.model.Coffee
+import it.coffee.smartcoffee.domain.model.CoffeeExtra
+import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
+import it.coffee.smartcoffee.domain.model.CoffeeSize
+import it.coffee.smartcoffee.domain.model.CoffeeType
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 
 class CoffeeRepositoryImpl(
     private val database: DatabaseDataSource,
     private val network: NetworkDataSource,
     private val dispatcherIo: CoroutineDispatcher) : CoffeeRepository {
 
-    override suspend fun getMachineInfo(machine_id: String): Result<CoffeeMachineInfo> {
+    override suspend fun getMachineInfo(machineId: String): Result<CoffeeMachineInfo> {
         return withContext(dispatcherIo) {
 
             val (resultNetwork, resultDatabase) = awaitAll(
-                async { network.getMachineInfo(machine_id) },
-                async { database.getMachineInfo(machine_id) }
+                async { network.getMachineInfo(machineId) },
+                async { database.getMachineInfo(machineId) }
             )
 
             // Always check network result first in case machine capabilities changed
@@ -33,8 +45,8 @@ class CoffeeRepositoryImpl(
         }
     }
 
-    override suspend fun getTypes(machine_id: String): Result<List<CoffeeType>> {
-        return database.getTypes(machine_id)
+    override suspend fun getTypes(machineId: String): Result<List<CoffeeType>> {
+        return database.getTypes(machineId)
     }
 
     override suspend fun getSizes(sizeIds: List<String>): Result<List<CoffeeSize>> {
@@ -45,13 +57,13 @@ class CoffeeRepositoryImpl(
         return database.getExtras(extraIds)
     }
 
-    override suspend fun putRecentCoffee(machine_id: String, coffee: Coffee) {
+    override suspend fun putRecentCoffee(machineId: String, coffee: Coffee) {
         withContext(dispatcherIo + NonCancellable) {
-            database.putRecentCoffee(machine_id, coffee)
+            database.putRecentCoffee(machineId, coffee)
         }
     }
 
-    override suspend fun getRecentCoffee(machine_id: String): Result<Coffee> {
-        return database.getRecentCoffee(machine_id)
+    override suspend fun getRecentCoffee(machineId: String): Result<Coffee> {
+        return database.getRecentCoffee(machineId)
     }
 }

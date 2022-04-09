@@ -8,8 +8,11 @@ import it.coffee.smartcoffee.domain.CoffeeMachineConnection
 import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.Failure
 import it.coffee.smartcoffee.domain.Success
+import it.coffee.smartcoffee.domain.UnknownError
 import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 sealed class ConnectionState
@@ -28,7 +31,21 @@ class ConnectViewModel(
     val connectionState: LiveData<ConnectionState> = _connectionState
 
     init {
-        scheduleHelpAppear()
+        viewModelScope.launch {
+            coffeeMachine.connectionState
+                .filterNotNull()
+                .collectLatest { state ->
+                    when (state) {
+                        is CoffeeMachineConnection.Connected -> getMachineInfo(state.machineId)
+
+                        is CoffeeMachineConnection.ConnectionFailure -> {
+                            _connectionState.value = ConnectionFailure(UnknownError(state.e))
+                        }
+
+                        is CoffeeMachineConnection.Waiting -> scheduleHelpAppear()
+                    }
+                }
+        }
     }
 
     // Show help message in two seconds if still in Waiting mode
@@ -42,19 +59,10 @@ class ConnectViewModel(
         }
     }
 
-    fun connect() {
+    private suspend fun getMachineInfo(machineId: String) {
 
         _connectionState.value = Connecting
 
-        viewModelScope.launch {
-            when (val connect = coffeeMachine.connect()) {
-                is Success -> getMachineInfo(connect.value)
-                is Failure -> _connectionState.value = ConnectionFailure(connect)
-            }
-        }
-    }
-
-    private suspend fun getMachineInfo(machineId: String) {
         when (val result = repository.getMachineInfo(machineId)) {
             is Success -> _connectionState.value = ConnectionSuccess(result.value)
             is Failure -> _connectionState.value = ConnectionFailure(result)
@@ -69,6 +77,12 @@ class ConnectViewModel(
     fun onErrorShown() {
         _connectionState.value = Waiting()
         scheduleHelpAppear()
+    }
+
+    fun forceConnect() {
+        viewModelScope.launch {
+            getMachineInfo(coffeeMachine.testMachineId)
+        }
     }
 
 }

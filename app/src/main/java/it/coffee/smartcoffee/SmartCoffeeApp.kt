@@ -41,7 +41,7 @@ class SmartCoffeeApp : Application() {
             CoffeeMachineConnectionImpl()
         }
 
-        viewModel { MainViewModel(get()) }
+        viewModel { MainViewModel(get(), get()) }
         viewModel { ConnectViewModel(get(), get()) }
         viewModel { parameters-> StyleViewModel(machineId = parameters.get(), get()) }
         viewModel { parameters-> SizeViewModel(style = parameters.get(), get()) }

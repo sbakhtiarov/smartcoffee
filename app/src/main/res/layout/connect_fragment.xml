@@ -44,7 +44,7 @@
         android:id="@+id/text_screen_tap"
         android:text="@string/tap_anywhere_to_continue"
         android:gravity="center"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textColor="@color/green"
         android:alpha="0.2"
         android:visibility="gone"

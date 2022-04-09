@@ -5,7 +5,7 @@
     <string name="dark_roasted_beans">Dark Roasted Beans</string>
     <string name="tab_the_machine_to_start">Tab the machine to start</string>
     <string name="how_does_this_work">How does this work?</string>
-    <string name="tap_anywhere_to_continue">Tap anywhere to continue</string>
+    <string name="tap_anywhere_to_continue">Scan any NFC tag\nor tap screen to continue</string>
     <string name="enjoy_you_coffee">Enjoy you coffee!</string>
     <string name="make_another">Make another</string>
     <string name="done">Done</string>
