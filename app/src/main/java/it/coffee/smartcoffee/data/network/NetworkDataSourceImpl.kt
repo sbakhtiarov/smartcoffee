@@ -14,7 +14,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import java.io.IOException
 
-class NetworkDataSourceImpl : NetworkDataSource {
+class NetworkDataSourceImpl(serviceUrl: String) : NetworkDataSource {
 
     private val coffeeApi: CoffeeApi
 
@@ -32,7 +32,7 @@ class NetworkDataSourceImpl : NetworkDataSource {
         }
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://darkroastedbeans.coffeeit.nl/")
+            .baseUrl(serviceUrl)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

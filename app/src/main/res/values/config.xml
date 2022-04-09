@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="coffee_service_url" translatable="false">https://darkroastedbeans.coffeeit.nl/</string>
+
+</resources>

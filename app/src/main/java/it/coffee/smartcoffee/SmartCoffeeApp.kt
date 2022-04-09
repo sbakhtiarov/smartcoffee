@@ -28,7 +28,7 @@ class SmartCoffeeApp : Application() {
         }
 
         single<NetworkDataSource> {
-            NetworkDataSourceImpl()
+            NetworkDataSourceImpl(getString(R.string.coffee_service_url))
         }
 
         single<CoffeeRepository> {
