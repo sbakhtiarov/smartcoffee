@@ -29,7 +29,7 @@ class MainViewModel(
     private val _navigate = MutableLiveData<Int?>()
     val navigate: LiveData<Int?> = _navigate
 
-    private val _enableNfc = MutableLiveData(true)
+    private val _enableNfc = MutableLiveData(false)
     val enableNfc: LiveData<Boolean> = _enableNfc
 
     fun onNavigateComplete() {
@@ -95,7 +95,16 @@ class MainViewModel(
         }
     }
 
-    suspend fun resetConnection() {
-        coffeeMachine.resetConnection()
+    fun checkNfcConnection() {
+        if (machineInfo == null) {
+            _enableNfc.value = true
+        }
+    }
+
+    fun closeNfcConnection() {
+        viewModelScope.launch {
+            coffeeMachine.resetConnection()
+        }
+        _enableNfc.value = false
     }
 }

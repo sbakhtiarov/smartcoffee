@@ -12,10 +12,10 @@ import android.nfc.tech.NfcA
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import it.coffee.smartcoffee.R
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -34,30 +34,29 @@ class MainActivity : AppCompatActivity() {
                     viewModel.onNavigateComplete()
                 }
             }
+        }
 
-            viewModel.enableNfc.observe(this@MainActivity) { enable ->
-                lifecycleScope.launchWhenResumed {
-                    if (enable) {
-                        enableNfc()
-                    } else {
-                        disableNfc()
-                    }
+        lifecycleScope.launchWhenResumed {
+            viewModel.enableNfc.distinctUntilChanged().observe(this@MainActivity) { enable ->
+                if (enable) {
+                    enableNfc()
+                } else {
+                    disableNfc()
                 }
             }
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        disableNfc()
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.checkNfcConnection()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
 
-        lifecycleScope.launch {
-            viewModel.resetConnection()
-        }
+        viewModel.closeNfcConnection()
     }
 
     override fun onNewIntent(intent: Intent?) {
