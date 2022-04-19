@@ -5,6 +5,7 @@ import it.coffee.smartcoffee.data.CoffeeMachineConnectionImpl
 import it.coffee.smartcoffee.data.CoffeeRepositoryImpl
 import it.coffee.smartcoffee.data.database.DatabaseDataSourceImpl
 import it.coffee.smartcoffee.data.network.NetworkDataSourceImpl
+import it.coffee.smartcoffee.data.network.RetrofitClient
 import it.coffee.smartcoffee.domain.CoffeeMachineConnection
 import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.DatabaseDataSource
@@ -30,7 +31,7 @@ class SmartCoffeeApp : Application() {
         }
 
         single<NetworkDataSource> {
-            NetworkDataSourceImpl(getString(R.string.coffee_service_url))
+            NetworkDataSourceImpl(RetrofitClient(getString(R.string.coffee_service_url)))
         }
 
         single<CoffeeRepository> {

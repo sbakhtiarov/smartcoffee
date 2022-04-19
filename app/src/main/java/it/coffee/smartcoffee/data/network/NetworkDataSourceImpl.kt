@@ -1,44 +1,19 @@
 package it.coffee.smartcoffee.data.network
 
-import it.coffee.smartcoffee.BuildConfig
+import it.coffee.smartcoffee.domain.NetworkClient
 import it.coffee.smartcoffee.domain.NetworkDataSource
 import it.coffee.smartcoffee.domain.NetworkError
 import it.coffee.smartcoffee.domain.Result
 import it.coffee.smartcoffee.domain.Success
+import it.coffee.smartcoffee.domain.create
 import it.coffee.smartcoffee.domain.model.CoffeeMachineInfo
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import java.io.IOException
 
-class NetworkDataSourceImpl(serviceUrl: String) : NetworkDataSource {
+class NetworkDataSourceImpl(networkClient: NetworkClient) : NetworkDataSource {
 
-    private val coffeeApi: CoffeeApi
-
-    init {
-
-        val client = with(OkHttpClient.Builder()) {
-
-            if (BuildConfig.DEBUG) {
-                val logInterceptor = HttpLoggingInterceptor()
-                logInterceptor.level = HttpLoggingInterceptor.Level.BODY
-                addInterceptor(logInterceptor)
-            }
-
-            build()
-        }
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(serviceUrl)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        coffeeApi = retrofit.create(CoffeeApi::class.java)
-    }
+    private val coffeeApi: CoffeeApi = networkClient.create()
 
     override suspend fun getMachineInfo(machineId: String): Result<CoffeeMachineInfo> {
         return try {
