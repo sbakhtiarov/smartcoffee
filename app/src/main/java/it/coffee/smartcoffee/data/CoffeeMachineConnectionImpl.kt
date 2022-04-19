@@ -14,13 +14,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 
+@JvmInline
+value class NfcTag(val tag: Tag?)
+
 @Suppress("MagicNumber")
 class CoffeeMachineConnectionImpl : CoffeeMachineConnection {
 
     override val testMachineId: String = "60ba1ab72e35f2d9c786c610"
     override val connectionState = MutableStateFlow<CoffeeMachineConnectionState>(Waiting)
 
-    override suspend fun onNfcTagRead(tag: Tag) {
+    override suspend fun onNfcTagRead(tag: NfcTag) {
         withContext(Dispatchers.IO) {
             Log.e("NFC", "NFC Tag: $tag")
             connectionState.emit(Connected(testMachineId))

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.coffee.smartcoffee.R
+import it.coffee.smartcoffee.data.NfcTag
 import it.coffee.smartcoffee.domain.CoffeeMachineConnection
 import it.coffee.smartcoffee.domain.CoffeeRepository
 import it.coffee.smartcoffee.domain.model.Coffee
@@ -91,7 +92,7 @@ class MainViewModel(
 
     fun onNfcTagRead(tag: Tag) {
         viewModelScope.launch {
-            coffeeMachine.onNfcTagRead(tag)
+            coffeeMachine.onNfcTagRead(NfcTag(tag))
         }
     }
 
